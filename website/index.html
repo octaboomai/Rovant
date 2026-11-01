@@ -274,6 +274,20 @@ footer{
 .flinks{display:flex;gap:20px;flex-wrap:wrap}
 .flinks a:hover{color:var(--text-bright)}
 
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:22px;counter-reset:s}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;align-items:start;
+  border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:20px;
+  transition:border-color .18s,background .18s}
+.step:hover{border-color:var(--border-hover);background:var(--surface-card)}
+.step .no{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent-text);background:var(--accent)}
+.step h3{font-family:var(--display);font-size:16px;font-weight:600;margin:0 0 8px;color:var(--strong);letter-spacing:-.01em}
+.step p{margin:0 0 14px;color:var(--text);font-size:14.5px;line-height:1.6;max-width:60ch}
+.step p:last-child{margin-bottom:0}
+.step img{display:block;max-width:100%;height:auto;border:1px solid var(--border);border-radius:6px;background:#000}
+.step code{font-family:var(--mono);font-size:12.5px;background:var(--surface-elevated);padding:2px 5px;border-radius:4px;color:var(--text-bright)}
+@media(max-width:560px){.step{grid-template-columns:1fr}.step .no{margin-bottom:4px}}
 @media(max-width:1024px){
   .workspace{grid-template-columns:170px minmax(0,1fr)}
   .viewport{display:none}
@@ -318,7 +332,7 @@ footer{
       <a href="#architecture">Docs</a>
       <a href="#install">Download</a>
       <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
-      <a href="#limits">Limitations</a>
+      <a href="#walkthrough">Install guide</a>
     </div>
     <div class="navright">
       <button class="btn icon-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme">
@@ -551,10 +565,52 @@ footer{
     </div>
   </div></section>
 
-  <!-- 05 OSS -->
+  <section id="walkthrough"><div class="wrap">
+    <div class="shead">
+      <span class="kicker">05 / Windows walkthrough</span>
+      <h2>What you'll see when you install.</h2>
+      <p class="lede">The build is unsigned, so Windows warns you once. That's expected. Here is the entire flow, in order.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <span class="no">1</span>
+        <div>
+          <h3>Download the installer</h3>
+          <p>Chrome saves <code>rovant-0.2.0-windows-x64.exe</code>. If it says the file isn't commonly downloaded, that's the unsigned build — choose <strong>Keep</strong>.</p>
+          <img src="img/install-1-open-file.png" alt="Download the installer" loading="lazy" />
+        </div>
+      </li>
+      <li class="step">
+        <span class="no">2</span>
+        <div>
+          <h3>Windows SmartScreen warns you</h3>
+          <p>Because the build is unsigned, Windows shows <em>Publisher: Unknown</em>. Click <strong>More info</strong>, then <strong>Keep anyway</strong>. Signed builds are coming.</p>
+          <img src="img/install-2-smartscreen.png" alt="Windows SmartScreen warns you" loading="lazy" />
+        </div>
+      </li>
+      <li class="step">
+        <span class="no">3</span>
+        <div>
+          <h3>Accept the licence</h3>
+          <p>Rovant is Apache 2.0. Review and click <strong>I Agree</strong>.</p>
+          <img src="img/install-3-license.png" alt="Accept the licence" loading="lazy" />
+        </div>
+      </li>
+      <li class="step">
+        <span class="no">4</span>
+        <div>
+          <h3>Choose who can install it</h3>
+          <p><strong>Anyone who uses this computer</strong> needs admin rights; <strong>Only for me</strong> does not. Then click <strong>Next</strong> to finish.</p>
+          <img src="img/install-4-options.png" alt="Choose who can install it" loading="lazy" />
+        </div>
+      </li>
+    </ol>
+  </div></section>
+
+  <!-- 06 OSS -->
   <section id="limits"><div class="wrap">
     <div class="shead">
-      <span class="kicker">05 / Open source</span>
+      <span class="kicker">06 / Open source</span>
       <h2>Apache 2.0, no lock-in.</h2>
     </div>
     <div class="oss">
