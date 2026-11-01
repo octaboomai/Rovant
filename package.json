@@ -32,5 +32,11 @@
     "jeff-hykin.better-cpp-syntax": "https://open-vsx.org/api/jeff-hykin/better-cpp-syntax/1.27.1/file/jeff-hykin.better-cpp-syntax-1.27.1.vsix",
     "twxs.cmake": "https://open-vsx.org/api/twxs/cmake/0.0.17/file/twxs.cmake-0.0.17.vsix",
     "DotJoshJohnson.xml": "https://open-vsx.org/api/DotJoshJohnson/xml/2.5.1/file/DotJoshJohnson.xml-2.5.1.vsix"
-  }
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "o1-extension/lib/browser/index.js",
+      "backend": "o1-extension/lib/node/index.js"
+    }
+  ]
 }
