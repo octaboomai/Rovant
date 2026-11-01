@@ -1,10 +1,15 @@
 {
-  "name": "rovant-extension",
+  "name": "o1-extension",
   "version": "0.1.0",
-  "description": "Rovant — ROS 2 robotics extension",
-  "keywords": ["theia-extension"],
+  "description": "Rovant \u2014 ROS 2 robotics extension",
+  "keywords": [
+    "theia-extension"
+  ],
   "license": "Apache-2.0",
-  "files": ["lib", "src"],
+  "files": [
+    "lib",
+    "src"
+  ],
   "main": "lib/node/index",
   "browser": "lib/browser/index",
   "theiaExtensions": [

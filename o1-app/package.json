@@ -1,5 +1,5 @@
 {
-  "name": "rovant-app",
+  "name": "o1-app",
   "version": "0.2.0",
   "private": true,
   "main": "lib/backend/electron-main.js",
