@@ -5,16 +5,16 @@
   "license": "Apache-2.0",
   "private": true,
   "workspaces": [
-    "rovant-app",
-    "rovant-extension"
+    "o1-app",
+    "o1-extension"
   ],
   "scripts": {
-    "build": "yarn workspace rovant-extension build && yarn workspace rovant-app build",
-    "build:prod": "yarn workspace rovant-extension build && yarn workspace rovant-app build:prod",
+    "build": "yarn workspace o1-extension build && yarn workspace o1-app build",
+    "build:prod": "yarn workspace o1-extension build && yarn workspace o1-app build:prod",
     "dist:linux": "yarn build:prod && electron-builder --linux deb AppImage",
     "dist:windows": "yarn build:prod && electron-builder --win nsis",
-    "start": "yarn workspace rovant-app start",
-    "clean": "yarn workspace rovant-extension clean && yarn workspace rovant-app clean"
+    "start": "yarn workspace o1-app start",
+    "clean": "yarn workspace o1-extension clean && yarn workspace o1-app clean"
   },
   "devDependencies": {
     "electron-builder": "^24.13.3",
@@ -22,11 +22,11 @@
     "electron-updater": "^6.3.9",
     "electron": "42.8.1"
   },
-  "main": "rovant-app/lib/backend/electron-main.js",
+  "main": "o1-app/lib/backend/electron-main.js",
   "overrides": {
     "electron": "42.8.1"
   },
-  "theiaPluginsDir": "rovant-app/plugins",
+  "theiaPluginsDir": "o1-app/plugins",
   "theiaPlugins": {
     "magicstack.MagicPython": "https://open-vsx.org/api/magicstack/MagicPython/1.1.1/file/magicstack.MagicPython-1.1.1.vsix",
     "jeff-hykin.better-cpp-syntax": "https://open-vsx.org/api/jeff-hykin/better-cpp-syntax/1.27.1/file/jeff-hykin.better-cpp-syntax-1.27.1.vsix",

@@ -20,8 +20,8 @@ Include:
 We will respond within **48 hours** and aim to release a patch within **14 days** for critical issues.
 
 ## Scope
-- The Electron shell (`rovant-app/`)
-- The Theia extension (`rovant-extension/`)
+- The Electron shell (`o1-app/`)
+- The Theia extension (`o1-extension/`)
 - The REST backend endpoints (`/o1/*`)
 - The build pipeline and CI/CD configuration
 

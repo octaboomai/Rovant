@@ -39,7 +39,7 @@ const proc = spawn(scriptPath, [], {
 ```
 
 ### 2.2 Port Polling Without Timeout in `waitForPort`
-**File:** `rovant-app/src/electron-main.ts`
+**File:** `o1-app/src/electron-main.ts`
 **Risk:** MEDIUM
 
 The `waitForPort` function has a timeout but the inner `http.get` can hang until OS-level TCP timeout (~2 min) if the port is firewalled rather than closed.
@@ -51,7 +51,7 @@ req.on('timeout', () => { req.destroy(); resolve(false); });
 ```
 
 ### 2.3 No Error Handling in `firstRunSetup`
-**File:** `rovant-app/src/electron-main.ts`
+**File:** `o1-app/src/electron-main.ts`
 **Risk:** MEDIUM
 
 If pip is not found and both install attempts fail, the function silently continues and marks setup as complete. This means on next launch, pip errors are never shown to the user.
@@ -83,7 +83,7 @@ try { new URL(url); } catch {
 | ROS distro list | detect-ros.sh, install-toolchain-windows.ps1, electron-main.ts | ~5 |
 | Error-to-UI pattern | Multiple widgets repeat `.style.color = '#ff7b44'` | ~8 |
 
-**Recommendation:** Extract shared utilities into `rovant-extension/src/common/utils.ts`.
+**Recommendation:** Extract shared utilities into `o1-extension/src/common/utils.ts`.
 
 ---
 

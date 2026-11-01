@@ -42,14 +42,14 @@ Rovant is a **native desktop IDE** for drone and robotics engineers, built on Ec
 
 ## 2. Component Inventory
 
-### 2.1 Electron Shell (`rovant-app/src/`)
+### 2.1 Electron Shell (`o1-app/src/`)
 | File | Role | Lines |
 |---|---|---|
 | `electron-main.ts` | Process manager, window lifecycle, IPC, auto-updater | ~350 |
 | `preload.ts` | Secure IPC bridge (contextBridge) | ~30 |
 | `splash.html` | Branded loading screen | ~60 |
 
-### 2.2 Theia Extension (`rovant-extension/src/`)
+### 2.2 Theia Extension (`o1-extension/src/`)
 **Browser-side (renderer process):**
 | Module | Responsibility |
 |---|---|

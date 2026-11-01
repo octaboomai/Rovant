@@ -18,10 +18,10 @@ jobs:
           node-version: '22'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
-      - name: Type-check rovant-extension
-        run: cd rovant-extension && npx tsc -p tsconfig.json --noEmit
-      - name: Type-check rovant-app
-        run: cd rovant-app && npx tsc --noEmit 2>/dev/null || true
+      - name: Type-check o1-extension
+        run: cd o1-extension && npx tsc -p tsconfig.json --noEmit
+      - name: Type-check o1-app
+        run: cd o1-app && npx tsc --noEmit 2>/dev/null || true
 
   # ── Lint ────────────────────────────────────────────────────────────────────
   lint:
@@ -35,7 +35,7 @@ jobs:
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - name: ESLint
-        run: npx eslint "rovant-extension/src/**/*.ts" "rovant-app/src/**/*.ts" \
+        run: npx eslint "o1-extension/src/**/*.ts" "o1-app/src/**/*.ts" \
                --ext .ts --max-warnings 0 2>/dev/null || echo "ESLint not configured — skipping"
 
   # ── Unit + Integration Tests ────────────────────────────────────────────────

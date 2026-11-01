@@ -69,9 +69,9 @@ yarn --version  # need 1.22+
 git clone https://github.com/octaboomai/rovant
 cd rovant
 yarn install
-yarn workspace rovant-extension build
-yarn workspace rovant-app build      # dev build (with source maps)
-yarn workspace rovant-app start      # launch Electron
+yarn workspace o1-extension build
+yarn workspace o1-app build      # dev build (with source maps)
+yarn workspace o1-app start      # launch Electron
 ```
 
 ### Production Package
@@ -119,7 +119,7 @@ Payments:   Lemonsqueezy or Paddle (no monthly fee, % of revenue only)
 Before tagging a release:
 
 - [ ] All CI checks passing on `main`
-- [ ] Version bumped in `package.json` and `rovant-app/package.json`
+- [ ] Version bumped in `package.json` and `o1-app/package.json`
 - [ ] `CHANGELOG.md` updated
 - [ ] `README.md` reflects current features
 - [ ] No `.env` or secrets in the commit

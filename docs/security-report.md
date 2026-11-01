@@ -39,7 +39,7 @@ spawn(scriptPath, [], { shell: false, env: { PATH: SAFE_PATH, HOME: os.homedir()
 ---
 
 ### SEC-003 — Electron `webSecurity: false` in Dev [MEDIUM] ⚠️ DOCUMENTED
-**File:** `rovant-app/src/electron-main.ts`
+**File:** `o1-app/src/electron-main.ts`
 **Finding:** `webSecurity: !isDev` disables same-origin policy in dev mode. Enables CSRF if dev server is running alongside malicious local page.
 **Recommendation:** Enable webSecurity in all modes. Use Electron's `session.defaultSession.webRequest` for CORS in dev instead.
 **Risk in production:** None (webSecurity: true in production).
@@ -47,7 +47,7 @@ spawn(scriptPath, [], { shell: false, env: { PATH: SAFE_PATH, HOME: os.homedir()
 ---
 
 ### SEC-004 — No CSP on Splash Screen [MEDIUM] ⚠️ DOCUMENTED
-**File:** `rovant-app/src/splash.html`
+**File:** `o1-app/src/splash.html`
 **Finding:** No Content-Security-Policy meta tag. As a local file loaded by Electron, inline scripts could execute.
 **Recommendation:** Add `<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none';">`
 **Fix:** No external content in splash.html currently. Low actual risk.

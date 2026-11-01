@@ -13,10 +13,10 @@ module.exports = {
     },
 
     files: [
-        "rovant-app/lib/**/*",
-        "rovant-app/package.json",
-        "rovant-extension/lib/**/*",
-        "rovant-extension/package.json",
+        "o1-app/lib/**/*",
+        "o1-app/package.json",
+        "o1-extension/lib/**/*",
+        "o1-extension/package.json",
         "node_modules/**/*",
         "resources/**/*",
         "!**/node_modules/.cache/**/*",
@@ -33,11 +33,11 @@ module.exports = {
         { from: "resources/vendor", to: "vendor", filter: ["three.min.js","roslib.min.js"] },
         // Theia language extensions (Python, C/C++, CMake, XML) — without this the
         // plugins are downloaded but never packaged, so no grammar is registered.
-        { from: "rovant-app/plugins", to: "plugins", filter: ["**/*"] },
+        { from: "o1-app/plugins", to: "plugins", filter: ["**/*"] },
         // Post-install scripts
         { from: "scripts", to: "scripts", filter: ["*.sh","*.ps1"] },
         // Splash screen
-        { from: "rovant-app/src/splash.html", to: "resources/splash.html" },
+        { from: "o1-app/src/splash.html", to: "resources/splash.html" },
     ],
 
     // ── Linux ──────────────────────────────────────────────────────────────
