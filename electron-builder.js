@@ -37,7 +37,7 @@ module.exports = {
         // Post-install scripts
         { from: "scripts", to: "scripts", filter: ["*.sh","*.ps1"] },
         // Splash screen
-        { from: "o1-app/src/splash.html", to: "resources/splash.html" },
+        { from: "o1-app/src/splash.html", to: "splash.html" },
     ],
 
     // ── Linux ──────────────────────────────────────────────────────────────
