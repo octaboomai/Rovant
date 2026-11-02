@@ -83,6 +83,8 @@ jobs:
           fetch_plugin magicstack.MagicPython-1.1.1 "https://open-vsx.org/api/magicstack/MagicPython/1.1.1/file/magicstack.MagicPython-1.1.1.vsix"
           fetch_plugin jeff-hykin.better-cpp-syntax-1.27.1 "https://open-vsx.org/api/jeff-hykin/better-cpp-syntax/1.27.1/file/jeff-hykin.better-cpp-syntax-1.27.1.vsix"
           fetch_plugin twxs.cmake-0.0.17 "https://open-vsx.org/api/twxs/cmake/0.0.17/file/twxs.cmake-0.0.17.vsix"
+          fetch_plugin ms-pyright.pyright-1.1.402 "https://open-vsx.org/api/ms-pyright/pyright/1.1.402/file/ms-pyright.pyright-1.1.402.vsix"
+          fetch_plugin llvm-vs-code-extensions.vscode-clangd-0.6.0 "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.6.0/file/llvm-vs-code-extensions.vscode-clangd-0.6.0.vsix"
           fetch_plugin DotJoshJohnson.xml-2.5.1 "https://open-vsx.org/api/DotJoshJohnson/xml/2.5.1/file/DotJoshJohnson.xml-2.5.1.vsix"
           # C++ grammar ships WITHOUT a language declaration, so .cpp never maps to it.
           # Add a tiny plugin that declares the language and reuses the MIT grammar.
