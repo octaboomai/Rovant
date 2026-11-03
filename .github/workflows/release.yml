@@ -231,6 +231,14 @@ jobs:
           for f in dist/linux-builds/*.deb dist/linux-builds/*.AppImage dist/windows-builds/*.exe; do
             if [ ! -f "$f" ]; then echo "::error::missing build output: $f"; missing=1; fi
           done
+          # electron-updater resolves releases from these manifests; without them the
+          # app checks for updates forever and finds nothing.
+          for f in dist/linux-builds/latest-linux.yml dist/windows-builds/latest.yml; do
+            if [ ! -f "$f" ]; then echo "::error::missing updater manifest: $f"; missing=1; fi
+          done
+          if ! ls dist/*/*.blockmap >/dev/null 2>&1; then
+            echo "::error::missing .blockmap files (differential updates unavailable)"; missing=1
+          fi
           [ "$missing" -eq 0 ] || exit 1
 
       - name: Prepare release notes
@@ -259,6 +267,10 @@ jobs:
           files: |
             dist/linux-builds/*.deb
             dist/linux-builds/*.AppImage
+            dist/linux-builds/*.blockmap
+            dist/linux-builds/latest-linux.yml
             dist/windows-builds/*.exe
+            dist/windows-builds/*.blockmap
+            dist/windows-builds/latest.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
