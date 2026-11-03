@@ -18,7 +18,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as http from 'http';
-import { spawn, ChildProcess } from 'child_process';
+import { spawn, exec, ChildProcess } from 'child_process';
 import { waitForPort, findFreePort } from './utils';
 const isDev  = process.env['NODE_ENV'] === 'development';
 const APP_NAME    = 'Rovant';
@@ -95,6 +95,9 @@ async function startTheiaBackend(): Promise<void> {
 
     const env = {
         ...process.env,
+        // CRITICAL: without this, process.execPath (the Electron binary) launches a
+        // second GUI window instead of a Node backend, and the app dies silently.
+        ELECTRON_RUN_AS_NODE: '1',
         THEIA_ELECTRON_WINDOW_OPTIONS: JSON.stringify({ backgroundColor: '#07090d' }),
         // Point clangd at the bundled binary
         PATH: [

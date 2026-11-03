@@ -142,7 +142,7 @@ export class O1RestContribution implements BackendApplicationContribution {
                     shell: false,
                     env: process.env,
                 })
-                : spawn(scriptPath, [], {
+                : spawn('/bin/bash', [scriptPath], {
                     shell: false,
                     env: {
                         HOME:   os.homedir(),
