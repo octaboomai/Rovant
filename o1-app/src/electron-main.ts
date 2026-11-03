@@ -19,7 +19,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as http from 'http';
 import { spawn, ChildProcess } from 'child_process';
-import { waitForPort, findFreePort, execAsync } from './utils';
+import { waitForPort, findFreePort, safeExec } from './utils';
 const isDev  = process.env['NODE_ENV'] === 'development';
 const APP_NAME    = 'Rovant';
 const APP_VERSION = app.getVersion();
@@ -69,7 +69,7 @@ app.whenReady().then(async () => {
 
 // ── Splash screen (shown while backend starts) ─────────────────────────────────
 function showSplash(): void {
-    const splashPath = path.join(__dirname, '..', 'resources', 'splash.html');
+    const splashPath = resourcePath('splash.html');
     if (!fs.existsSync(splashPath)) return;
 
     splashWindow = new BrowserWindow({
@@ -139,10 +139,10 @@ async function firstRunSetup(): Promise<void> {
     const pip = process.platform === 'win32' ? 'pip' : 'pip3';
     const pkgs = 'pymavlink pyulog numpy';
     try {
-        await execAsync(`${pip} install ${pkgs} --break-system-packages -q 2>&1`, { timeout: 90_000 });
+        await safeExec(`${pip} install ${pkgs} --break-system-packages -q 2>&1`, { timeout: 90_000 });
     } catch {
         try {
-            await execAsync(`${pip} install ${pkgs} -q 2>&1`, { timeout: 90_000 });
+            await safeExec(`${pip} install ${pkgs} -q 2>&1`, { timeout: 90_000 });
         } catch {
             console.warn('[Rovant] pip install failed — user will see manual instructions in toolchain tab');
         }
@@ -284,8 +284,14 @@ function setupAutoUpdater(): void {
         autoUpdater.setFeedURL({
             provider: 'github',
             owner:    'octaboomai',
-            repo:     'rovant',
+            repo:     'Rovant',
         } as any);
+
+        // An unhandled 'error' on an EventEmitter throws and kills the main process.
+        // Offline / rate-limited / no release asset must degrade quietly.
+        autoUpdater.on('error', (err: any) => {
+            console.warn('[Rovant updater]', err?.message || err);
+        });
 
         autoUpdater.logger = null;
         autoUpdater.checkForUpdates().catch(() => {});
@@ -326,7 +332,7 @@ async function detectToolchain(): Promise<Record<string, { found: boolean; versi
     const results: Record<string, { found: boolean; version: string }> = {};
     for (const [id, cmd] of Object.entries(checks)) {
         try {
-            const { stdout } = await execAsync(cmd, { timeout: 6000, shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/bash' });
+            const { stdout } = await safeExec(cmd, { timeout: 6000, shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/bash' });
             results[id] = { found: true, version: stdout.trim().split('\n')[0].substring(0, 70) };
         } catch {
             results[id] = { found: false, version: 'not found' };

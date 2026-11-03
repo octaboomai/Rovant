@@ -71,7 +71,7 @@ if ($wslOk) {
         wsl -- bash -c @"
 sudo apt-get update && sudo apt-get install -y curl gnupg2 lsb-release
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu focal main' | sudo tee /etc/apt/sources.list.d/ros2.list
+echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu jammy main' | sudo tee /etc/apt/sources.list.d/ros2.list
 sudo apt-get update && sudo apt-get install -y ros-humble-ros-base python3-colcon-common-extensions
 echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc
 "@
