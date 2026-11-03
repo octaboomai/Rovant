@@ -2,12 +2,12 @@
  * Rovant — REST API backend contribution
  *
  * Endpoints:
- *   GET /o1/health              — liveness check
- *   GET /o1/check               — full environment scan (all tools)
- *   GET /o1/check/:id           — single tool check
- *   GET /o1/install-stream      — SSE install log stream
- *   GET /o1/ros/topics          — live ROS 2 topic list
- *   GET /o1/xacro-expand?path=  — expand xacro → URDF (server-side)
+ *   GET /rovant/health              — liveness check
+ *   GET /rovant/check               — full environment scan (all tools)
+ *   GET /rovant/check/:id           — single tool check
+ *   GET /rovant/install-stream      — SSE install log stream
+ *   GET /rovant/ros/topics          — live ROS 2 topic list
+ *   GET /rovant/xacro-expand?path=  — expand xacro → URDF (server-side)
  *
  * Security: execFile used instead of shell=true; PATH restricted for installs.
  */
@@ -83,7 +83,7 @@ export class RovantRestContribution implements BackendApplicationContribution {
     configure(app: Application): void {
 
         // ── Optional API token middleware ────────────────────────────────────
-        app.use('/o1', (req: Request, res: Response, next: NextFunction) => {
+        app.use('/rovant', (req: Request, res: Response, next: NextFunction) => {
             const token = process.env['IDE_API_TOKEN'];
             if (!token) { next(); return; }
             const bearer = (req.headers['authorization'] ?? '').replace(/^Bearer\s+/i, '');
@@ -92,19 +92,19 @@ export class RovantRestContribution implements BackendApplicationContribution {
             res.status(401).json({ error: 'Unauthorized' });
         });
 
-        // ── GET /o1/health ───────────────────────────────────────────────────
-        app.get('/o1/health', (_req: Request, res: Response) => {
+        // ── GET /rovant/health ───────────────────────────────────────────────────
+        app.get('/rovant/health', (_req: Request, res: Response) => {
             res.json({ status: 'ok', version: process.env['npm_package_version'] ?? 'unknown', ts: Date.now() });
         });
 
-        // ── GET /o1/check — parallel, safe ────────────────────────────────────
-        app.get('/o1/check', async (_req: Request, res: Response) => {
+        // ── GET /rovant/check — parallel, safe ────────────────────────────────────
+        app.get('/rovant/check', async (_req: Request, res: Response) => {
             const results = await Promise.all(TOOL_DEFS.map(t => this.runCheck(t)));
             res.json(results);
         });
 
-        // ── GET /o1/check/:id ────────────────────────────────────────────────
-        app.get('/o1/check/:id', async (req: Request, res: Response) => {
+        // ── GET /rovant/check/:id ────────────────────────────────────────────────
+        app.get('/rovant/check/:id', async (req: Request, res: Response) => {
             const id   = String(req.params['id'] ?? '');
             const tool = TOOL_DEFS.find(t => t.id === id);
             if (!tool) {
@@ -114,8 +114,8 @@ export class RovantRestContribution implements BackendApplicationContribution {
             res.json(await this.runCheck(tool));
         });
 
-        // ── GET /o1/install-stream — SSE, restricted env ─────────────────────
-        app.get('/o1/install-stream', (req: Request, res: Response) => {
+        // ── GET /rovant/install-stream — SSE, restricted env ─────────────────────
+        app.get('/rovant/install-stream', (req: Request, res: Response) => {
             res.setHeader('Content-Type',    'text/event-stream');
             res.setHeader('Cache-Control',   'no-cache');
             res.setHeader('Connection',      'keep-alive');
@@ -164,8 +164,8 @@ export class RovantRestContribution implements BackendApplicationContribution {
             req.on('close', () => { if (!proc.killed) proc.kill('SIGTERM'); });
         });
 
-        // ── GET /o1/ros/topics ───────────────────────────────────────────────
-        app.get('/o1/ros/topics', async (_req: Request, res: Response) => {
+        // ── GET /rovant/ros/topics ───────────────────────────────────────────────
+        app.get('/rovant/ros/topics', async (_req: Request, res: Response) => {
             try {
                 const { stdout } = await execFile(
                     ROS_SHELL,
@@ -185,10 +185,10 @@ export class RovantRestContribution implements BackendApplicationContribution {
             }
         });
 
-        // ── GET /o1/xacro-expand?path=<abs> — expand xacro → URDF XML ────────
+        // ── GET /rovant/xacro-expand?path=<abs> — expand xacro → URDF XML ────────
         // BUG FIX: Re-added endpoint removed in new version but still called by
         // urdf-viewer-widget.ts. Uses execFile (not exec) to prevent injection.
-        app.get('/o1/xacro-expand', async (req: Request, res: Response) => {
+        app.get('/rovant/xacro-expand', async (req: Request, res: Response) => {
             const rawPath = String(req.query['path'] ?? '').trim();
             if (!rawPath) {
                 res.status(400).json({ error: 'Missing ?path= parameter' });

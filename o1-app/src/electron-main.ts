@@ -67,6 +67,20 @@ app.whenReady().then(async () => {
     splashWindow?.close();
 });
 
+/**
+ * Resolve a file that ships inside resources/.
+ *
+ * Packaged: process.resourcesPath IS resources/ — walking `__dirname/../resources`
+ * from inside app.asar lands nowhere, which is why the splash and icon silently
+ * failed to load in a release build.
+ * Dev:      resources/ sits two levels above lib/backend.
+ */
+function resourcePath(...parts: string[]): string {
+    const packaged = path.join(process.resourcesPath || '', ...parts);
+    if (fs.existsSync(packaged)) return packaged;
+    return path.join(__dirname, '..', '..', 'resources', ...parts);
+}
+
 // ── Splash screen (shown while backend starts) ─────────────────────────────────
 function showSplash(): void {
     const splashPath = resourcePath('splash.html');
@@ -351,12 +365,12 @@ function detectRosCmd(): string {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function defaultWorkspace(): string {
-    return path.join(os.homedir(), 'o1-workspace');
+    return path.join(os.homedir(), 'rovant-workspace');
 }
 
 function getIconPath(): string {
     const ext  = process.platform === 'win32' ? 'ico' : 'png';
-    const file = path.join(__dirname, '..', 'resources', `icon.${ext}`);
+    const file = resourcePath(`icon.${ext}`);
     return fs.existsSync(file) ? file : '';
 }
 
