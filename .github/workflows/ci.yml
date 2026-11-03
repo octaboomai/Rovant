@@ -21,7 +21,7 @@ jobs:
       - name: Type-check o1-extension
         run: cd o1-extension && npx tsc -p tsconfig.json --noEmit
       - name: Type-check o1-app
-        run: cd o1-app && npx tsc --noEmit 2>/dev/null || true
+        run: cd o1-app && npx tsc -p tsconfig.json --noEmit
 
   # ── Lint ────────────────────────────────────────────────────────────────────
   lint:
