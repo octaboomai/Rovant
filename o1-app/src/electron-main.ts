@@ -18,8 +18,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as http from 'http';
-import { spawn, exec, ChildProcess } from 'child_process';
-import { waitForPort, findFreePort } from './utils';
+import { spawn, ChildProcess } from 'child_process';
+import { waitForPort, findFreePort, execAsync } from './utils';
 const isDev  = process.env['NODE_ENV'] === 'development';
 const APP_NAME    = 'Rovant';
 const APP_VERSION = app.getVersion();
@@ -139,10 +139,10 @@ async function firstRunSetup(): Promise<void> {
     const pip = process.platform === 'win32' ? 'pip' : 'pip3';
     const pkgs = 'pymavlink pyulog numpy';
     try {
-        await exec(`${pip} install ${pkgs} --break-system-packages -q 2>&1`, { timeout: 90_000 });
+        await execAsync(`${pip} install ${pkgs} --break-system-packages -q 2>&1`, { timeout: 90_000 });
     } catch {
         try {
-            await exec(`${pip} install ${pkgs} -q 2>&1`, { timeout: 90_000 });
+            await execAsync(`${pip} install ${pkgs} -q 2>&1`, { timeout: 90_000 });
         } catch {
             console.warn('[Rovant] pip install failed — user will see manual instructions in toolchain tab');
         }
@@ -326,7 +326,7 @@ async function detectToolchain(): Promise<Record<string, { found: boolean; versi
     const results: Record<string, { found: boolean; version: string }> = {};
     for (const [id, cmd] of Object.entries(checks)) {
         try {
-            const { stdout } = await exec(cmd, { timeout: 6000, shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/bash' });
+            const { stdout } = await execAsync(cmd, { timeout: 6000, shell: process.platform === 'win32' ? 'cmd.exe' : '/bin/bash' });
             results[id] = { found: true, version: stdout.trim().split('\n')[0].substring(0, 70) };
         } catch {
             results[id] = { found: false, version: 'not found' };
