@@ -1,181 +1,114 @@
 /**
  * Integration tests — Rovant REST API
  *
- * Spins up a minimal Express server with O1RestContribution mounted.
- * No real tool binaries required — child_process is mocked.
+ * These mount the REAL contribution. `new RovantRestContribution().configure(app)`
+ * registers every route on a real Express app; the server is started on an
+ * ephemeral port and exercised over HTTP.
+ *
+ * The previous version of this file built its own Express app and re-declared
+ * each route by hand. It passed no matter what the real handler did, which is
+ * exactly how a broken endpoint could ship.
  */
 import * as express from 'express';
-import * as http    from 'http';
+import * as http from 'http';
+import { AddressInfo } from 'net';
 
-// ── Minimal Express server matching real Rovant backend ──────────────────────────
-function createTestServer(overrides: {
-    checkResult?: Record<string, {found:boolean; version:string}>;
-    installExitCode?: number;
-}) {
+import { RovantRestContribution } from '../../o1-extension/src/node/rovant-rest-contribution';
+
+interface Harness {
+    base: string;
+    close: () => Promise<void>;
+}
+
+/** Boot the contribution's own routes on a random free port. */
+async function startRealServer(): Promise<Harness> {
     const app = express.default();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new RovantRestContribution().configure(app as any);
 
-    app.get('/o1/health', (_req, res) => {
-        res.json({ status: 'ok', version: '0.1.0', ts: Date.now() });
-    });
+    const server = http.createServer(app);
+    await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
+    const { port } = server.address() as AddressInfo;
 
-    const defaults: Record<string, {found:boolean; version:string}> = {
-        ros2:      { found: true,  version: 'ros2 0.14.0' },
-        colcon:    { found: true,  version: 'colcon 0.16.0' },
-        clangd:    { found: true,  version: 'Ubuntu clangd version 15' },
-        pyright:   { found: false, version: 'not found' },
-        pymavlink: { found: true,  version: '2.4.41' },
-        ...(overrides.checkResult ?? {}),
+    return {
+        base: `http://127.0.0.1:${port}`,
+        close: () => new Promise<void>(resolve => server.close(() => resolve())),
     };
-
-    app.get('/o1/check', (_req, res) => {
-        const results = Object.entries(defaults).map(([id, v]) => ({
-            id, label: id, found: v.found, version: v.version,
-        }));
-        res.json(results);
-    });
-
-    app.get('/o1/check/:id', (req, res) => {
-        const id = req.params['id'];
-        const allowed = Object.keys(defaults);
-        if (!allowed.includes(id)) {
-            res.status(404).json({ error: `Unknown tool: ${id}` });
-            return;
-        }
-        const v = defaults[id];
-        res.json({ id, label: id, found: v!.found, version: v!.version });
-    });
-
-    app.get('/o1/install-stream', (req, res) => {
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.flushHeaders();
-        const code = overrides.installExitCode ?? 0;
-        res.write(`data: ${JSON.stringify({ type: 'info', line: 'Starting...' })}\n\n`);
-        setTimeout(() => {
-            res.write(`data: ${JSON.stringify({ type: code === 0 ? 'done' : 'error', line: `Exit: ${code}` })}\n\n`);
-            res.end();
-        }, 50);
-    });
-
-    app.get('/o1/ros/topics', (_req, res) => {
-        res.json({ topics: [
-            { name: '/cmd_vel',       type: 'geometry_msgs/msg/Twist' },
-            { name: '/odom',          type: 'nav_msgs/msg/Odometry' },
-            { name: '/battery_state', type: 'sensor_msgs/msg/BatteryState' },
-        ]});
-    });
-
-    return app;
 }
 
-// ── HTTP helper ───────────────────────────────────────────────────────────────
-function get(server: http.Server, path: string): Promise<{status:number; body:any}> {
-    return new Promise((resolve, reject) => {
-        const addr = server.address() as {port:number};
-        const req  = http.get(`http://127.0.0.1:${addr.port}${path}`, res => {
-            let raw = '';
-            res.on('data', d => raw += d);
-            res.on('end', () => {
-                try { resolve({ status: res.statusCode ?? 0, body: JSON.parse(raw) }); }
-                catch { resolve({ status: res.statusCode ?? 0, body: raw }); }
-            });
-        });
-        req.on('error', reject);
-    });
+async function getJson(url: string): Promise<{ status: number; body: any }> {
+    const res = await fetch(url);
+    const text = await res.text();
+    let body: any = text;
+    try { body = JSON.parse(text); } catch { /* keep raw text */ }
+    return { status: res.status, body };
 }
 
-// ── Test suite ────────────────────────────────────────────────────────────────
-describe('Rovant REST API — /o1/health', () => {
-    let server: http.Server;
-    beforeAll(cb => { server = createTestServer({}).listen(0, '127.0.0.1', cb); });
-    afterAll(cb  => { server.close(cb); });
+describe('RovantRestContribution (mounted for real)', () => {
+    let h: Harness;
 
-    it('returns 200 with status:ok', async () => {
-        const { status, body } = await get(server, '/o1/health');
+    beforeAll(async () => { h = await startRealServer(); });
+    afterAll(async () => { await h.close(); });
+
+    it('GET /rovant/health responds 200 with status ok', async () => {
+        const { status, body } = await getJson(`${h.base}/rovant/health`);
         expect(status).toBe(200);
         expect(body.status).toBe('ok');
-        expect(body.ts).toBeGreaterThan(0);
+        expect(typeof body.ts).toBe('number');
     });
-});
 
-describe('Rovant REST API — /o1/check', () => {
-    let server: http.Server;
-    beforeAll(cb => { server = createTestServer({}).listen(0, '127.0.0.1', cb); });
-    afterAll(cb  => { server.close(cb); });
-
-    it('returns an array of check results', async () => {
-        const { status, body } = await get(server, '/o1/check');
+    it('GET /rovant/check returns an array of tool results', async () => {
+        const { status, body } = await getJson(`${h.base}/rovant/check`);
         expect(status).toBe(200);
         expect(Array.isArray(body)).toBe(true);
         expect(body.length).toBeGreaterThan(0);
-    });
+        for (const row of body) {
+            expect(typeof row.id).toBe('string');
+            expect(typeof row.found).toBe('boolean');
+            expect(typeof row.version).toBe('string');
+        }
+    }, 60_000);
 
-    it('each result has required fields', async () => {
-        const { body } = await get(server, '/o1/check');
-        body.forEach((r: any) => {
-            expect(r).toHaveProperty('id');
-            expect(r).toHaveProperty('label');
-            expect(r).toHaveProperty('found');
-            expect(r).toHaveProperty('version');
-            expect(typeof r.found).toBe('boolean');
-        });
-    });
-
-    it('reflects found:true for ros2', async () => {
-        const { body } = await get(server, '/o1/check');
-        const ros2 = body.find((r: any) => r.id === 'ros2');
-        expect(ros2).toBeDefined();
-        expect(ros2.found).toBe(true);
-    });
-
-    it('reflects found:false for pyright when not installed', async () => {
-        const { body } = await get(server, '/o1/check');
-        const pyright = body.find((r: any) => r.id === 'pyright');
-        expect(pyright?.found).toBe(false);
-    });
-});
-
-describe('Rovant REST API — /o1/check/:id', () => {
-    let server: http.Server;
-    beforeAll(cb => { server = createTestServer({}).listen(0, '127.0.0.1', cb); });
-    afterAll(cb  => { server.close(cb); });
-
-    it('returns 200 for known tool id', async () => {
-        const { status, body } = await get(server, '/o1/check/ros2');
+    it('GET /rovant/check/:id returns a single result', async () => {
+        const { status, body } = await getJson(`${h.base}/rovant/check/git`);
         expect(status).toBe(200);
-        expect(body.id).toBe('ros2');
+        expect(body.id).toBe('git');
+    }, 30_000);
+
+    it('GET /rovant/xacro-expand rejects a path outside the workspace with 403', async () => {
+        const { status } = await getJson(
+            `${h.base}/rovant/xacro-expand?path=${encodeURIComponent('/etc/passwd')}`
+        );
+        expect(status).toBe(403);
     });
 
-    it('returns 404 for unknown tool id', async () => {
-        const { status, body } = await get(server, '/o1/check/nonexistent');
-        expect(status).toBe(404);
-        expect(body.error).toContain('Unknown');
+    it('GET /rovant/xacro-expand without a path returns 400', async () => {
+        const { status } = await getJson(`${h.base}/rovant/xacro-expand`);
+        expect(status).toBe(400);
     });
 
-    it('rejects id with path traversal attempt', async () => {
-        const { status } = await get(server, '/o1/check/../../etc/passwd');
+    it('the legacy /o1 prefix is no longer served', async () => {
+        const { status } = await getJson(`${h.base}/o1/health`);
         expect(status).toBe(404);
     });
-});
 
-describe('Rovant REST API — /o1/ros/topics', () => {
-    let server: http.Server;
-    beforeAll(cb => { server = createTestServer({}).listen(0, '127.0.0.1', cb); });
-    afterAll(cb  => { server.close(cb); });
+    it('the API token middleware rejects a wrong bearer when IDE_API_TOKEN is set', async () => {
+        const previous = process.env['IDE_API_TOKEN'];
+        process.env['IDE_API_TOKEN'] = 'secret-token';
 
-    it('returns topic list', async () => {
-        const { status, body } = await get(server, '/o1/ros/topics');
-        expect(status).toBe(200);
-        expect(Array.isArray(body.topics)).toBe(true);
-        expect(body.topics.length).toBeGreaterThan(0);
-    });
+        const guarded = await startRealServer();
+        try {
+            const unauth = await getJson(`${guarded.base}/rovant/health`);
+            expect(unauth.status).toBe(401);
 
-    it('each topic has name and type fields', async () => {
-        const { body } = await get(server, '/o1/ros/topics');
-        body.topics.forEach((t: any) => {
-            expect(t).toHaveProperty('name');
-            expect(t).toHaveProperty('type');
-            expect(t.name.startsWith('/')).toBe(true);
-        });
+            const res = await fetch(`${guarded.base}/rovant/health`, {
+                headers: { authorization: 'Bearer secret-token' },
+            });
+            expect(res.status).toBe(200);
+        } finally {
+            await guarded.close();
+            if (previous === undefined) delete process.env['IDE_API_TOKEN'];
+            else process.env['IDE_API_TOKEN'] = previous;
+        }
     });
 });

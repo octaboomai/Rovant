@@ -3,7 +3,7 @@ import { TaskContribution } from '@theia/task/lib/browser/task-contribution';
 import { BackendApplicationContribution } from '@theia/core/lib/node/backend-application';
 import { DebugAdapterContribution } from '@theia/debug/lib/common/debug-model';
 import { RosBuildTaskProvider } from './ros-build-tasks';
-import { O1RestContribution } from './rovant-rest-contribution';
+import { RovantRestContribution } from './rovant-rest-contribution';
 import { PythonDebugAdapterContribution } from './python-debug-adapter';
 
 export default new ContainerModule(bind => {
@@ -16,6 +16,6 @@ export default new ContainerModule(bind => {
     bind(TaskContribution).toService(RosBuildTaskProvider);
 
     // Toolchain REST API + optional auth middleware
-    bind(O1RestContribution).toSelf().inSingletonScope();
-    bind(BackendApplicationContribution).toService(O1RestContribution);
+    bind(RovantRestContribution).toSelf().inSingletonScope();
+    bind(BackendApplicationContribution).toService(RovantRestContribution);
 });
