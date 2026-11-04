@@ -1,5 +1,5 @@
 {
-  "name": "o1-extension",
+  "name": "rovant-extension",
   "version": "0.1.0",
   "description": "Rovant \u2014 ROS 2 robotics extension",
   "keywords": [
@@ -14,8 +14,8 @@
   "browser": "lib/browser/index",
   "theiaExtensions": [
     {
-      "frontend": "lib/browser/o1-frontend-module",
-      "backend": "lib/node/o1-backend-module"
+      "frontend": "lib/browser/rovant-frontend-module",
+      "backend": "lib/node/rovant-backend-module"
     }
   ],
   "scripts": {

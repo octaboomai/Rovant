@@ -7,8 +7,8 @@
 
 | # | Task | Priority | Owner |
 |---|---|---|---|
-| C-1 | Fix shell injection in `/o1/install-stream` | P0 🔴 | Backend |
-| C-2 | Add `/o1/health` endpoint | P0 🔴 | Backend |
+| C-1 | Fix shell injection in `/rovant/install-stream` | P0 🔴 | Backend |
+| C-2 | Add `/rovant/health` endpoint | P0 🔴 | Backend |
 | C-3 | Add PR lint + TypeScript type-check CI workflow | P0 🔴 | DevOps |
 | C-4 | Add unit tests for `detectToolchain()` | P0 🔴 | QA |
 | C-5 | Add `http.get` socket timeout in `waitForPort` | P0 🔴 | Electron |
@@ -24,7 +24,7 @@
 | Q-1 | SECURITY.md + Dependabot config | Security | 1h |
 | Q-2 | CodeQL scanning workflow | Security | 1h |
 | Q-3 | Add Sentry crash reporting (opt-in) | Stability | 3h |
-| Q-4 | `/o1/ros/topics` — filter system topics | UX | 1h |
+| Q-4 | `/rovant/ros/topics` — filter system topics | UX | 1h |
 | Q-5 | URDF viewer — cache parsed result per file | Performance | 2h |
 | Q-6 | Add loading state to ROS Topics Widget | UX | 1h |
 | Q-7 | Log rotation for Theia backend stdout | Stability | 1h |

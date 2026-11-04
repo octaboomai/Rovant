@@ -6,7 +6,7 @@ import { MessageService } from '@theia/core/lib/common/message-service';
 /**
  * FEATURE 3: URDF / Xacro 3D preview
  * - .urdf files: parsed directly in the Three.js webview
- * - .xacro files: expanded server-side via /o1/xacro-expand then rendered
+ * - .xacro files: expanded server-side via /rovant/xacro-expand then rendered
  */
 @injectable()
 export class UrdfViewerWidget extends BaseWidget implements StatefulWidget {
@@ -73,7 +73,7 @@ export class UrdfViewerWidget extends BaseWidget implements StatefulWidget {
         }
 
         try {
-            const url = `/o1/xacro-expand?path=${encodeURIComponent(filePath)}`;
+            const url = `/rovant/xacro-expand?path=${encodeURIComponent(filePath)}`;
             const res = await fetch(url);
 
             if (!res.ok) {

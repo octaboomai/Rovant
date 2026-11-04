@@ -13,10 +13,10 @@ module.exports = {
     },
 
     files: [
-        "o1-app/lib/**/*",
-        "o1-app/package.json",
-        "o1-extension/lib/**/*",
-        "o1-extension/package.json",
+        "rovant-app/lib/**/*",
+        "rovant-app/package.json",
+        "rovant-extension/lib/**/*",
+        "rovant-extension/package.json",
         "node_modules/**/*",
         "resources/**/*",
         "!**/node_modules/.cache/**/*",
@@ -33,11 +33,11 @@ module.exports = {
         { from: "resources/vendor", to: "vendor", filter: ["three.min.js","roslib.min.js"] },
         // Theia language extensions (Python, C/C++, CMake, XML) — without this the
         // plugins are downloaded but never packaged, so no grammar is registered.
-        { from: "o1-app/plugins", to: "plugins", filter: ["**/*"] },
+        { from: "rovant-app/plugins", to: "plugins", filter: ["**/*"] },
         // Post-install scripts
         { from: "scripts", to: "scripts", filter: ["*.sh","*.ps1"] },
         // Splash screen
-        { from: "o1-app/src/splash.html", to: "splash.html" },
+        { from: "rovant-app/src/splash.html", to: "splash.html" },
     ],
 
     // ── Linux ──────────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ module.exports = {
         icon:        "resources/icon.png",
         category:    "Development",
         description: "ROS 2 robotics IDE — zero-setup for drone and robot developers",
-        maintainer:  "octaboomai <hello@o1ide.dev>",
+        maintainer:  "octaboomai <hello@rovant.dev>",
         desktop: {
             Name:       "Rovant",
             Comment:    "ROS 2 robotics IDE",

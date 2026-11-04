@@ -15,11 +15,11 @@ import { ToolchainInstallerWidget } from './toolchain/toolchain-installer';
 import { TemplatesContribution } from './templates/templates-contribution';
 
 export namespace O1Commands {
-    export const OPEN_URDF_VIEWER:      Command = { id: 'o1.openUrdfViewer',     label: 'Open URDF Viewer'       };
-    export const OPEN_ROS_TOPICS:       Command = { id: 'o1.openRosTopics',      label: 'Open ROS Topics'        };
-    export const OPEN_TOOLCHAIN:        Command = { id: 'o1.openToolchain',      label: 'ROS 2 Toolchain Setup'  };
-    export const NEW_ROS_PROJECT:       Command = { id: 'o1.newRosProject',      label: 'New ROS 2 Project…'     };
-    export const PREVIEW_URDF_CURRENT:  Command = { id: 'o1.previewCurrentUrdf', label: 'Preview Current URDF'   };
+    export const OPEN_URDF_VIEWER:      Command = { id: 'rovant.openUrdfViewer',     label: 'Open URDF Viewer'       };
+    export const OPEN_ROS_TOPICS:       Command = { id: 'rovant.openRosTopics',      label: 'Open ROS Topics'        };
+    export const OPEN_TOOLCHAIN:        Command = { id: 'rovant.openToolchain',      label: 'ROS 2 Toolchain Setup'  };
+    export const NEW_ROS_PROJECT:       Command = { id: 'rovant.newRosProject',      label: 'New ROS 2 Project…'     };
+    export const PREVIEW_URDF_CURRENT:  Command = { id: 'rovant.previewCurrentUrdf', label: 'Preview Current URDF'   };
 }
 
 export namespace O1Menus {
@@ -162,11 +162,11 @@ export class O1CommandContribution
     }
 
     registerKeybindings(registry: KeybindingRegistry): void {
-        registry.registerKeybinding({ command: 'o1.runCurrentFile', keybinding: 'ctrl+r', when: 'editorFocus' });
+        registry.registerKeybinding({ command: 'rovant.runCurrentFile', keybinding: 'ctrl+r', when: 'editorFocus' });
     }
 
     registerCommands(registry: CommandRegistry): void {
-        registry.registerCommand({ id: 'o1.runCurrentFile', label: 'Run Current File in Terminal' }, {
+        registry.registerCommand({ id: 'rovant.runCurrentFile', label: 'Run Current File in Terminal' }, {
             execute: () => this.runCurrentFile()
         });
         registry.registerCommand(O1Commands.OPEN_URDF_VIEWER, {
@@ -223,9 +223,9 @@ export class O1MenuContribution implements MenuContribution {
         registry.registerMenuAction(O1Menus.ROS_MENU, { commandId: O1Commands.OPEN_URDF_VIEWER.id,     order: '3' });
         registry.registerMenuAction(O1Menus.ROS_MENU, { commandId: O1Commands.OPEN_ROS_TOPICS.id,      order: '4' });
         registry.registerMenuAction(O1Menus.ROS_MENU, { commandId: O1Commands.PREVIEW_URDF_CURRENT.id, order: '5' });
-        registry.registerMenuAction(O1Menus.ROS_MENU, { commandId: 'o1.runCurrentFile',            order: '6' });
+        registry.registerMenuAction(O1Menus.ROS_MENU, { commandId: 'rovant.runCurrentFile',            order: '6' });
         // #3 — also under the Run menu. Theia does not expose a RUN constant in
         // CommonMenus, so use the menu id directly; harmless if it is not present.
-        registry.registerMenuAction(['3_run'], { commandId: 'o1.runCurrentFile', order: '0' });
+        registry.registerMenuAction(['3_run'], { commandId: 'rovant.runCurrentFile', order: '0' });
     }
 }

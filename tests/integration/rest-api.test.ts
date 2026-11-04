@@ -13,7 +13,7 @@ import * as express from 'express';
 import * as http from 'http';
 import { AddressInfo } from 'net';
 
-import { RovantRestContribution } from '../../o1-extension/src/node/rovant-rest-contribution';
+import { RovantRestContribution } from '../../rovant-extension/src/node/rovant-rest-contribution';
 
 interface Harness {
     base: string;

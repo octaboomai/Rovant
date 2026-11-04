@@ -15,7 +15,7 @@
 **Critical missing test areas:**
 - `detectToolchain()` — most complex logic, zero coverage
 - `startTheiaBackend()` — spawn + retry logic untested
-- REST `/o1/check` — all 8 tool checks untested
+- REST `/rovant/check` — all 8 tool checks untested
 - `waitForPort()` — timeout logic untested
 - ROS Topics Widget — WebSocket state machine untested
 - URDF parser — geometry parsing untested
@@ -29,7 +29,7 @@
 | README.md | ✅ Present | Complete |
 | CHANGELOG.md | ✅ Present | v0.1.0 only |
 | Architecture docs | ✅ Generated (this audit) | |
-| API reference (`/o1/*`) | ❌ Missing | REST endpoints undocumented |
+| API reference (`/rovant/*`) | ❌ Missing | REST endpoints undocumented |
 | Extension development guide | ❌ Missing | How to add custom widgets |
 | Contributing guide | ❌ Missing | CONTRIBUTING.md |
 | Code of Conduct | ❌ Missing | CODE_OF_CONDUCT.md |
@@ -58,7 +58,7 @@
 | Crash reporting | ❌ Missing | Sentry (Electron SDK) |
 | Usage analytics (opt-in) | ❌ Missing | PostHog self-hosted |
 | Update adoption tracking | ❌ Missing | Track via GitHub Release downloads |
-| Backend health endpoint | ❌ Missing | `/o1/health` |
+| Backend health endpoint | ❌ Missing | `/rovant/health` |
 | Log aggregation | ❌ Missing | Local file logging with rotation |
 
 ---
@@ -94,7 +94,7 @@
 |---|---|---|
 | Unit tests for `detectToolchain` | P0 | 2h |
 | PR lint + type-check workflow | P0 | 1h |
-| `/o1/health` endpoint | P0 | 30m |
+| `/rovant/health` endpoint | P0 | 30m |
 | Shell injection fix (install-stream) | P0 | 1h |
 | SECURITY.md + Dependabot | P1 | 1h |
 | Integration tests for REST API | P1 | 3h |

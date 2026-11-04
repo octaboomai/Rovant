@@ -1,5 +1,5 @@
 {
-  "name": "o1-app",
+  "name": "rovant-app",
   "version": "0.2.0",
   "private": true,
   "main": "lib/backend/electron-main.js",
@@ -38,7 +38,7 @@
     "@theia/workspace": "1.76.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "o1-extension": "0.1.0"
+    "rovant-extension": "0.1.0"
   },
   "devDependencies": {
     "@theia/cli": "1.76.0",
@@ -71,8 +71,8 @@
   },
   "theiaExtensions": [
     {
-      "frontend": "../o1-extension/lib/browser/index.js",
-      "backend": "../o1-extension/lib/node/index.js"
+      "frontend": "../rovant-extension/lib/browser/index.js",
+      "backend": "../rovant-extension/lib/node/index.js"
     }
   ]
 }

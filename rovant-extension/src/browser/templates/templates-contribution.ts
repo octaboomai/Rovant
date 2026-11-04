@@ -44,7 +44,7 @@ function packageXml(pkg: string, desc: string): string {
 <package format="3">
   <name>${pkg}</name><version>0.1.0</version>
   <description>${desc}</description>
-  <maintainer email="dev@o1.ide">Developer</maintainer>
+  <maintainer email="dev@rovant.dev">Developer</maintainer>
   <license>MIT</license>
   <depend>rclpy</depend><depend>std_msgs</depend>
   <depend>sensor_msgs</depend><depend>geometry_msgs</depend>

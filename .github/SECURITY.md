@@ -9,7 +9,7 @@
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Email: **security@o1ide.dev**
+Email: **security@rovant.dev**
 
 Include:
 - Description of the vulnerability
@@ -20,9 +20,9 @@ Include:
 We will respond within **48 hours** and aim to release a patch within **14 days** for critical issues.
 
 ## Scope
-- The Electron shell (`o1-app/`)
-- The Theia extension (`o1-extension/`)
-- The REST backend endpoints (`/o1/*`)
+- The Electron shell (`rovant-app/`)
+- The Theia extension (`rovant-extension/`)
+- The REST backend endpoints (`/rovant/*`)
 - The build pipeline and CI/CD configuration
 
 ## Out of Scope

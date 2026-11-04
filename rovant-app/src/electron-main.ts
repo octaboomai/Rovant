@@ -265,12 +265,12 @@ function setupMenu(): void {
         {
             label: 'Help',
             submenu: [
-                { label: 'Rovant Website',  click: () => shell.openExternal('https://o1ide.dev') },
-                { label: 'Documentation',   click: () => shell.openExternal('https://o1ide.dev/docs') },
+                { label: 'Rovant Website',  click: () => shell.openExternal('https://rovant.dev') },
+                { label: 'Documentation',   click: () => shell.openExternal('https://rovant.dev/docs') },
                 { label: 'ROS Discourse',   click: () => shell.openExternal('https://discourse.ros.org') },
                 { type: 'separator' },
-                { label: 'Terms of Service', click: () => shell.openExternal('https://o1ide.dev/terms') },
-                { label: 'Privacy Policy',   click: () => shell.openExternal('https://o1ide.dev/privacy') },
+                { label: 'Terms of Service', click: () => shell.openExternal('https://rovant.dev/terms') },
+                { label: 'Privacy Policy',   click: () => shell.openExternal('https://rovant.dev/privacy') },
                 { type: 'separator' },
                 { label: 'Report Issue',    click: () => shell.openExternal('https://github.com/octaboomai/rovant/issues') },
                 { label: 'About Rovant',    click: showAbout },
@@ -388,7 +388,7 @@ function showAbout(): void {
     dialog.showMessageBox(mainWindow!, {
         type: 'none', title: `About ${APP_NAME}`,
         message: `Rovant  v${APP_VERSION}`,
-        detail:  "The IDE that reads your drone's mind.\n\nBuilt on Eclipse Theia.\nLicensed under Apache 2.0.\n\nhttps://o1ide.dev",
+        detail:  "The IDE that reads your drone's mind.\n\nBuilt on Eclipse Theia.\nLicensed under Apache 2.0.\n\nhttps://rovant.dev",
         buttons: ['OK'],
     });
 }

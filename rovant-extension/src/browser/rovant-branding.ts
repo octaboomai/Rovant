@@ -24,87 +24,87 @@ const O1_CSS = `
 
 /* ── Color tokens ──────────────────────────────────────────── */
 body {
-  --o1-bg0:      #07090d;
-  --o1-bg1:      #0a0e14;
-  --o1-bg2:      #0d1520;
-  --o1-cyan:     #0fdfff;
-  --o1-cyan-dim: rgba(15,223,255,0.18);
-  --o1-fg:       #d4e4f0;
-  --o1-fg-dim:   #7a94a4;
-  --o1-green:    #10c980;
-  --o1-orange:   #ff7b44;
-  --o1-amber:    #f59e0b;
+  --rovant-bg0:      #07090d;
+  --rovant-bg1:      #0a0e14;
+  --rovant-bg2:      #0d1520;
+  --rovant-cyan:     #0fdfff;
+  --rovant-cyan-dim: rgba(15,223,255,0.18);
+  --rovant-fg:       #d4e4f0;
+  --rovant-fg-dim:   #7a94a4;
+  --rovant-green:    #10c980;
+  --rovant-orange:   #ff7b44;
+  --rovant-amber:    #f59e0b;
 }
 
 /* ── Activity bar (left icon strip) ───────────────────────── */
 #theia-left-content-panel .p-TabBar,
 .theia-app-left .p-TabBar {
-  background: var(--o1-bg1) !important;
+  background: var(--rovant-bg1) !important;
   border-right: 1px solid rgba(255,255,255,0.05);
 }
 .p-TabBar-tab.theia-mod-active {
-  border-left: 2px solid var(--o1-cyan) !important;
+  border-left: 2px solid var(--rovant-cyan) !important;
 }
 
 /* ── Side panel (file explorer, ROS topics, etc.) ─────────── */
 #theia-left-content-panel {
-  background: var(--o1-bg2) !important;
+  background: var(--rovant-bg2) !important;
 }
 .theia-TreeNode:hover {
-  background: var(--o1-cyan-dim) !important;
+  background: var(--rovant-cyan-dim) !important;
 }
 
 /* ── Editor area ───────────────────────────────────────────── */
 .monaco-editor .margin,
 .monaco-editor-background {
-  background: var(--o1-bg0) !important;
+  background: var(--rovant-bg0) !important;
 }
 
 /* ── Tab bar ───────────────────────────────────────────────── */
 .p-TabBar-content {
-  background: var(--o1-bg1);
+  background: var(--rovant-bg1);
 }
 .p-TabBar-tab.theia-mod-current {
-  border-top: 2px solid var(--o1-cyan) !important;
-  background: var(--o1-bg0) !important;
+  border-top: 2px solid var(--rovant-cyan) !important;
+  background: var(--rovant-bg0) !important;
 }
 
 /* ── Status bar (bottom) ───────────────────────────────────── */
 #theia-statusBar {
-  background: var(--o1-bg1) !important;
+  background: var(--rovant-bg1) !important;
   border-top: 1px solid rgba(15,223,255,0.15);
 }
 #theia-statusBar .area {
-  color: var(--o1-fg-dim) !important;
+  color: var(--rovant-fg-dim) !important;
 }
 
 /* ── Title bar ─────────────────────────────────────────────── */
 .theia-ApplicationShell .theia-top-panel {
-  background: var(--o1-bg1) !important;
+  background: var(--rovant-bg1) !important;
 }
 
 /* ── Menus ─────────────────────────────────────────────────── */
 .p-Menu {
-  background: var(--o1-bg2) !important;
+  background: var(--rovant-bg2) !important;
   border: 1px solid rgba(15,223,255,0.15) !important;
   border-radius: 6px;
 }
 .p-Menu-item.p-mod-active {
-  background: var(--o1-cyan-dim) !important;
+  background: var(--rovant-cyan-dim) !important;
 }
 
 /* ── Focus border ──────────────────────────────────────────── */
 *:focus-visible {
-  outline-color: var(--o1-cyan) !important;
+  outline-color: var(--rovant-cyan) !important;
 }
 input:focus, select:focus, textarea:focus {
-  border-color: var(--o1-cyan) !important;
+  border-color: var(--rovant-cyan) !important;
 }
 
 /* ── Buttons ───────────────────────────────────────────────── */
 .theia-button.main {
-  background: var(--o1-cyan) !important;
-  color: var(--o1-bg0) !important;
+  background: var(--rovant-cyan) !important;
+  color: var(--rovant-bg0) !important;
   font-weight: 700;
 }
 .theia-button {
@@ -118,16 +118,16 @@ input:focus, select:focus, textarea:focus {
 ::-webkit-scrollbar-thumb:hover { background: rgba(15,223,255,0.4); }
 
 /* ── Rovant logo in activity bar (top slot) ───────────────────── */
-#o1-logo-slot {
+#rovant-logo-slot {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 48px;
   flex-shrink: 0;
   border-bottom: 1px solid rgba(15,223,255,0.08);
-  background: var(--o1-bg1);
+  background: var(--rovant-bg1);
 }
-#o1-logo-slot svg {
+#rovant-logo-slot svg {
   width: 26px;
   height: 26px;
 }
@@ -144,9 +144,9 @@ export class O1BrandingContribution implements FrontendApplicationContribution {
     }
 
     private injectCSS(): void {
-        if (document.getElementById('o1-brand-css')) return;
+        if (document.getElementById('rovant-brand-css')) return;
         const style = document.createElement('style');
-        style.id    = 'o1-brand-css';
+        style.id    = 'rovant-brand-css';
         style.textContent = O1_CSS;
         document.head.appendChild(style);
     }
@@ -160,9 +160,9 @@ export class O1BrandingContribution implements FrontendApplicationContribution {
                 document.querySelector('#theia-left-content-panel .p-TabBar') ||
                 document.querySelector('.p-TabBar.theia-app-left');
 
-            if (bar && !document.getElementById('o1-logo-slot')) {
+            if (bar && !document.getElementById('rovant-logo-slot')) {
                 const slot = document.createElement('div');
-                slot.id = 'o1-logo-slot';
+                slot.id = 'rovant-logo-slot';
                 slot.title = 'Rovant';
                 slot.innerHTML = O1_LOGO_SVG;
                 bar.parentElement?.prepend(slot);

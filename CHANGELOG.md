@@ -9,7 +9,7 @@
 - colcon, CMake, rosdep build tasks (13 registered)
 - ROS 2 + Python attach-to-process debug configs (auto-written)
 - Project templates: PX4 Quadcopter, ArduPilot Fixed-Wing, ROS2 Ground Robot, Jetson Vision Node, RPi MAVLink Bridge
-- Toolchain installer with real environment checks (/o1/check REST API)
+- Toolchain installer with real environment checks (/rovant/check REST API)
 - Rovant brand theme (dark, cyan accent) + animated splash screen
 - System tray: minimize to tray, reopen from tray
 - Auto-updater via GitHub Releases (electron-updater)

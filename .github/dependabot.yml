@@ -10,7 +10,7 @@ updates:
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
-    directory: "/o1-app"
+    directory: "/rovant-app"
     schedule: { interval: weekly, day: monday }
     open-pull-requests-limit: 3
 

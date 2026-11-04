@@ -42,20 +42,20 @@ Rovant is a **native desktop IDE** for drone and robotics engineers, built on Ec
 
 ## 2. Component Inventory
 
-### 2.1 Electron Shell (`o1-app/src/`)
+### 2.1 Electron Shell (`rovant-app/src/`)
 | File | Role | Lines |
 |---|---|---|
 | `electron-main.ts` | Process manager, window lifecycle, IPC, auto-updater | ~350 |
 | `preload.ts` | Secure IPC bridge (contextBridge) | ~30 |
 | `splash.html` | Branded loading screen | ~60 |
 
-### 2.2 Theia Extension (`o1-extension/src/`)
+### 2.2 Theia Extension (`rovant-extension/src/`)
 **Browser-side (renderer process):**
 | Module | Responsibility |
 |---|---|
-| `o1-commands.ts` | Menu commands + keyboard shortcuts |
-| `o1-frontend-module.ts` | Dependency injection bindings |
-| `o1-branding.ts` | Logo, CSS theme, favicon injection |
+| `rovant-commands.ts` | Menu commands + keyboard shortcuts |
+| `rovant-frontend-module.ts` | Dependency injection bindings |
+| `rovant-branding.ts` | Logo, CSS theme, favicon injection |
 | `ros-topics/ros-topics-widget.ts` | Live ROS 2 topic viewer via rosbridge WebSocket |
 | `urdf-viewer/urdf-viewer-widget.ts` | 3D URDF/Xacro model preview (Three.js) |
 | `toolchain/toolchain-installer.ts` | Environment checker + installer UI |
@@ -66,8 +66,8 @@ Rovant is a **native desktop IDE** for drone and robotics engineers, built on Ec
 **Node-side (backend process):**
 | Module | Responsibility |
 |---|---|
-| `o1-rest-contribution.ts` | REST API: `/o1/check`, `/o1/install-stream`, `/o1/ros/topics` |
-| `o1-backend-module.ts` | InversifyJS DI bindings for backend |
+| `rovant-rest-contribution.ts` | REST API: `/rovant/check`, `/rovant/install-stream`, `/rovant/ros/topics` |
+| `rovant-backend-module.ts` | InversifyJS DI bindings for backend |
 | `ros-build-tasks.ts` | 13 colcon/CMake/ROS 2 task providers |
 
 ### 2.3 Build & Packaging
@@ -99,7 +99,7 @@ User's Robot (rosbridge:9090)
 ### 3.2 Toolchain Check
 ```
 ToolchainInstallerWidget (browser)
-    → fetch GET /o1/check
+    → fetch GET /rovant/check
     → O1RestContribution (node backend)
     → exec("ros2 --version", "clangd --version", ...)
     → JSON result → UI status rows
@@ -108,7 +108,7 @@ ToolchainInstallerWidget (browser)
 ### 3.3 Install Stream
 ```
 ToolchainInstallerWidget
-    → EventSource /o1/install-stream
+    → EventSource /rovant/install-stream
     → O1RestContribution streams stdout/stderr
     → SSE lines → log UI rows
 ```
@@ -149,8 +149,8 @@ Electron main spawns → Theia backend (port 3001)
 | rosbridge | WebSocket | bidirectional | ROS 2 topic pub/sub |
 | MAVLink | UDP:14550 / Serial | in | Drone telemetry (future) |
 | GitHub Releases | HTTPS | out | Auto-update check |
-| `/o1/check` | HTTP GET | internal | Toolchain detection |
-| `/o1/install-stream` | SSE | internal | Install log streaming |
+| `/rovant/check` | HTTP GET | internal | Toolchain detection |
+| `/rovant/install-stream` | SSE | internal | Install log streaming |
 
 ---
 
@@ -161,6 +161,6 @@ Electron main spawns → Theia backend (port 3001)
 | Theia 1.76.0 hardcoded | Medium | Should be a version range in CI |
 | Single THEIA_PORT=3001 | Medium | Port conflicts not fully tested |
 | No persistent telemetry store | High | All data in memory, lost on restart |
-| No authentication on REST endpoints | Medium | `/o1/install-stream` runs shell — local only but worth noting |
+| No authentication on REST endpoints | Medium | `/rovant/install-stream` runs shell — local only but worth noting |
 | WSL2 ROS path hardcoded to humble | Medium | Multiple distro support partial |
-| No plugin marketplace for o1-specific extensions | Low | Future gap |
+| No plugin marketplace for Rovant-specific extensions | Low | Future gap |

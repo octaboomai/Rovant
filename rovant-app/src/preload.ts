@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 /**
  * Secure IPC bridge — exposes only specific channels to the renderer.
- * The frontend can call window.o1.detectToolchain() etc.
+ * The frontend can call window.Rovant.detectToolchain() etc.
  */
 contextBridge.exposeInMainWorld('Rovant', {
     detectToolchain: () => ipcRenderer.invoke('Rovant:detect-toolchain'),

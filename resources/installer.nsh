@@ -17,5 +17,5 @@
 !macro customUnInstall
   ; Remove shortcuts
   Delete "$DESKTOP\Rovant.lnk"
-  Delete "$DESKTOP\o1-workspace.lnk"
+  Delete "$DESKTOP\rovant-workspace.lnk"
 !macroend

@@ -2,7 +2,7 @@
  * Unit tests — shared utilities (waitForPort, findFreePort, isValidWsUrl)
  */
 import * as net  from 'net';
-import { isValidWsUrl, findFreePort } from '../../o1-app/src/utils';
+import { isValidWsUrl, findFreePort } from '../../rovant-app/src/utils';
 
 // ── isValidWsUrl ──────────────────────────────────────────────────────────────
 describe('isValidWsUrl', () => {

@@ -18,8 +18,8 @@
   },
   "include": [
     "./**/*.ts",
-    "../o1-app/src/**/*.ts",
-    "../o1-extension/src/**/*.ts"
+    "../rovant-app/src/**/*.ts",
+    "../rovant-extension/src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

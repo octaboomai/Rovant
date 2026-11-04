@@ -19,8 +19,8 @@
 
 ## 2. Critical Issues
 
-### 2.1 Shell Injection Risk — `/o1/install-stream`
-**File:** `src/node/o1-rest-contribution.ts`
+### 2.1 Shell Injection Risk — `/rovant/install-stream`
+**File:** `src/node/rovant-rest-contribution.ts`
 **Risk:** HIGH
 
 The install endpoint runs `bash scripts/install-ros.sh` with no parameter validation. While the path is fixed (no user input), the environment is inherited fully. If `PATH` or any env var were manipulated, arbitrary commands could execute.
@@ -39,7 +39,7 @@ const proc = spawn(scriptPath, [], {
 ```
 
 ### 2.2 Port Polling Without Timeout in `waitForPort`
-**File:** `o1-app/src/electron-main.ts`
+**File:** `rovant-app/src/electron-main.ts`
 **Risk:** MEDIUM
 
 The `waitForPort` function has a timeout but the inner `http.get` can hang until OS-level TCP timeout (~2 min) if the port is firewalled rather than closed.
@@ -51,7 +51,7 @@ req.on('timeout', () => { req.destroy(); resolve(false); });
 ```
 
 ### 2.3 No Error Handling in `firstRunSetup`
-**File:** `o1-app/src/electron-main.ts`
+**File:** `rovant-app/src/electron-main.ts`
 **Risk:** MEDIUM
 
 If pip is not found and both install attempts fail, the function silently continues and marks setup as complete. This means on next launch, pip errors are never shown to the user.
@@ -78,12 +78,12 @@ try { new URL(url); } catch {
 
 | Pattern | Files | Lines duplicated |
 |---|---|---|
-| `exec` + timeout wrapper | electron-main.ts, o1-rest-contribution.ts | ~15 |
-| Check-result interface | toolchain-installer.ts (inline JS) mirrors o1-rest-contribution.ts | ~20 |
+| `exec` + timeout wrapper | electron-main.ts, rovant-rest-contribution.ts | ~15 |
+| Check-result interface | toolchain-installer.ts (inline JS) mirrors rovant-rest-contribution.ts | ~20 |
 | ROS distro list | detect-ros.sh, install-toolchain-windows.ps1, electron-main.ts | ~5 |
 | Error-to-UI pattern | Multiple widgets repeat `.style.color = '#ff7b44'` | ~8 |
 
-**Recommendation:** Extract shared utilities into `o1-extension/src/common/utils.ts`.
+**Recommendation:** Extract shared utilities into `rovant-extension/src/common/utils.ts`.
 
 ---
 
@@ -96,7 +96,7 @@ try { new URL(url); } catch {
 async function firstRunSetup()        // should be: Promise<void>
 function getIconPath()                // should be: string | undefined
 
-// 2. o1-rest-contribution.ts
+// 2. rovant-rest-contribution.ts
 private async runCheck(id, label, cmd) // params untyped in JS compiled form
 
 // 3. toolchain-installer.ts
@@ -110,7 +110,7 @@ private async runCheck(id, label, cmd) // params untyped in JS compiled form
 
 | File | Dead Symbol | Reason |
 |---|---|---|
-| `o1-frontend-module.ts` | `TemplatesContribution` imported but binding never activates on startup | Missing activation event |
+| `rovant-frontend-module.ts` | `TemplatesContribution` imported but binding never activates on startup | Missing activation event |
 | `ros-build-tasks.ts` | `ROS2_TASK_TYPE` constant | Defined but value duplicated inline |
 | `preload.ts` | `onCommand` + `onOpenFolder` | Registered but renderer never listens |
 
@@ -132,7 +132,7 @@ private async runCheck(id, label, cmd) // params untyped in JS compiled form
 | Finding | Severity | File | Line |
 |---|---|---|---|
 | `shell: true` implicit in exec | Medium | electron-main.ts | ~180 |
-| Unchecked `req.params['id']` in REST route | Medium | o1-rest-contribution.ts | ~55 |
+| Unchecked `req.params['id']` in REST route | Medium | rovant-rest-contribution.ts | ~55 |
 | `webSecurity: !isDev` disables in dev mode | Low | electron-main.ts | ~100 |
 | autoUpdater feed URL is HTTP not HTTPS | N/A | Resolved — uses GitHub HTTPS | — |
 | No CSP on splash.html | Low | splash.html | head |

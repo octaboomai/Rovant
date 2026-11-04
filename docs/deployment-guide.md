@@ -36,7 +36,7 @@ wget https://github.com/octaboomai/rovant/releases/latest/download/rovant-linux-
 sudo apt install ./rovant-linux-x64.deb
 
 # Launch
-o1ide
+rovant
 ```
 
 ### Linux — AppImage (any distro)
@@ -69,9 +69,9 @@ yarn --version  # need 1.22+
 git clone https://github.com/octaboomai/rovant
 cd rovant
 yarn install
-yarn workspace o1-extension build
-yarn workspace o1-app build      # dev build (with source maps)
-yarn workspace o1-app start      # launch Electron
+yarn workspace rovant-extension build
+yarn workspace rovant-app build      # dev build (with source maps)
+yarn workspace rovant-app start      # launch Electron
 ```
 
 ### Production Package
@@ -94,7 +94,7 @@ Rovant is a desktop app — no server hosting required. The only ongoing costs a
 | Service | Cost | Purpose |
 |---|---|---|
 | GitHub Free | $0 | Releases, CI/CD, issues |
-| o1ide.dev domain | ~$12/yr | Website + email |
+| rovant.dev domain | ~$12/yr | Website + email |
 | GitHub Pages | $0 | Website hosting |
 | Cloudflare | $0 | CDN for website |
 | Codecov | $0 (open source) | Coverage reports |
@@ -119,7 +119,7 @@ Payments:   Lemonsqueezy or Paddle (no monthly fee, % of revenue only)
 Before tagging a release:
 
 - [ ] All CI checks passing on `main`
-- [ ] Version bumped in `package.json` and `o1-app/package.json`
+- [ ] Version bumped in `package.json` and `rovant-app/package.json`
 - [ ] `CHANGELOG.md` updated
 - [ ] `README.md` reflects current features
 - [ ] No `.env` or secrets in the commit
@@ -162,7 +162,7 @@ grade: stable
 confinement: classic  # needed for filesystem access
 apps:
   rovant:
-    command: o1ide
+    command: rovant
     plugs: [home, network, removable-media]
 ```
 
@@ -174,7 +174,7 @@ Submit: `snapcraft push --release=stable rovant_0.1.1_amd64.snap`
 
 Submit a PR to `microsoft/winget-pkgs`:
 ```yaml
-PackageIdentifier: octaboomai.o1ide
+PackageIdentifier: octaboomai.rovant
 PackageVersion: 0.1.1
 PackageName: Rovant
 Publisher: octaboomai
@@ -183,4 +183,4 @@ InstallerSha256: <sha256 of exe>
 InstallerType: nullsoft
 ```
 
-Users then install with: `winget install octaboomai.o1ide`
+Users then install with: `winget install octaboomai.rovant`

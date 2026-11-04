@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rovant — ROS 2 Humble toolchain installer (Ubuntu 22.04)
 #
-# Invoked by the IDE's "Install / repair" button (GET /o1/install-stream).
+# Invoked by the IDE's "Install / repair" button (GET /rovant/install-stream).
 # Non-interactive, idempotent, and safe to re-run.
 set -euo pipefail
 

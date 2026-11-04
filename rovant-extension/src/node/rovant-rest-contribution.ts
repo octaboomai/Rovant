@@ -68,7 +68,7 @@ const TOOL_DEFS: ToolDef[] = [
  *  drive, so allow the existing drive roots as well as the home directory. */
 const WORKSPACE_ROOTS: string[] = IS_WIN
     ? [os.homedir(), ...['C', 'D', 'E', 'F', 'G'].map(d => `${d}:\\`).filter(r => fs.existsSync(r))]
-    : ['/workspace', '/home/o1user', os.homedir()];
+    : ['/workspace', '/home/rovant', os.homedir()];
 
 /** Restricted PATH used for the install script — prevents hijacking via env */
 const SAFE_PATH = [

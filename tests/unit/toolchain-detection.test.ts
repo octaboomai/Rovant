@@ -5,7 +5,7 @@
  */
 import { jest } from '@jest/globals';
 
-// ── Types mirrored from o1-rest-contribution ──────────────────────────────────
+// ── Types mirrored from rovant-rest-contribution ──────────────────────────────────
 interface CheckResult {
     id: string; label: string; found: boolean; version: string;
 }

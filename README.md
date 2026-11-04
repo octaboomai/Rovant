@@ -63,9 +63,9 @@ Then run the file from your Downloads folder. Windows may still show a SmartScre
 git clone https://github.com/octaboomai/Rovant
 cd rovant
 yarn install
-yarn workspace o1-extension build
-yarn workspace o1-app build       # dev build
-yarn workspace o1-app start       # run in Electron
+yarn workspace rovant-extension build
+yarn workspace rovant-app build       # dev build
+yarn workspace rovant-app start       # run in Electron
 
 # Production package
 yarn dist:linux    # → dist/*.deb + dist/*.AppImage
