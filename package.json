@@ -20,11 +20,11 @@
     "electron-builder": "^24.13.3",
     "typescript": "^5.3.3",
     "electron-updater": "^6.3.9",
-    "electron": "42.8.1"
+    "electron": "45.2.1"
   },
   "main": "rovant-app/lib/backend/electron-main.js",
   "overrides": {
-    "electron": "42.8.1"
+    "electron": "45.2.1"
   },
   "theiaPluginsDir": "rovant-app/plugins",
   "theiaPlugins": {
