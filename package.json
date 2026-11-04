@@ -19,7 +19,7 @@
   "devDependencies": {
     "electron-builder": "^24.13.3",
     "typescript": "^5.3.3",
-    "electron-updater": "^6.3.9",
+    "electron-updater": "^6.8.11",
     "electron": "42.8.1"
   },
   "main": "rovant-app/lib/backend/electron-main.js",
