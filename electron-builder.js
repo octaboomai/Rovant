@@ -99,7 +99,9 @@ module.exports = {
     publish: {
         provider:    "github",
         owner:       "octaboomai",   // FIX #3
-        repo:        "rovant",
+        repo:        "Rovant",
         releaseType: "release",
     },
+
+    generateUpdatesFilesForAllChannels: true,
 };
