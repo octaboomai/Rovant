@@ -2,36 +2,6 @@ import { injectable } from '@theia/core/shared/inversify';
 import { LanguageGrammarDefinitionContribution } from '@theia/monaco/lib/browser/textmate/textmate-contribution';
 import { TextmateRegistry } from '@theia/monaco/lib/browser/textmate/textmate-registry';
 
-/** Force the language onto already-open models: Theia assigns a language when an
- *  editor is created, so a file opened before registration (or restored from the
- *  previous session) stays "plaintext" forever. Re-apply it by extension. */
-function applyModelLanguages(map: Record<string, string>): void {
-    try {
-        for (const model of monaco.editor.getModels()) {
-            const p = model.uri.path.toLowerCase();
-            const dot = p.lastIndexOf('.');
-            if (dot < 0) continue;
-            const id = map[p.slice(dot)];
-            if (id && model.getLanguageId() !== id) {
-                monaco.editor.setModelLanguage(model, id);
-            }
-        }
-    } catch (err) {
-        console.error('[Rovant] could not apply model languages', err);
-    }
-}
-
-/** extension -> language id for the model sweep (built lazily; ROBOTICS_LANGUAGES
- *  is declared further down this file). */
-function extToLanguage(): Record<string, string> {
-    const map: Record<string, string> = {};
-    for (const spec of ROBOTICS_LANGUAGES) {
-        for (const ext of spec.extensions) map[ext.toLowerCase()] = spec.id;
-    }
-    return map;
-}
-
-
 /**
  * FEATURE: languages used in robotics / drone development.
  *
