@@ -74,7 +74,20 @@ jobs:
           exit 1
 
       - name: Build Theia (production)
-        run: yarn workspace rovant-extension build && yarn workspace rovant-app build:prod
+        shell: bash
+        run: |
+          # `theia build` re-runs electron/install.js, which fetches from
+          # github.com/electron/electron/releases — a host that intermittently 5xx's.
+          # Retry the build rather than failing the whole release on it.
+          for i in 1 2 3 4; do
+            if yarn workspace rovant-extension build && yarn workspace rovant-app build:prod; then
+              echo "build ok"; exit 0
+            fi
+            echo "::warning::build attempt $i failed (likely a GitHub 5xx fetching Electron) — retrying in 30s"
+            sleep 30
+          done
+          echo "::error::theia build failed 4 times"
+          exit 1
 
       - name: Download IDE plugins (language grammars)
         shell: bash   # Windows runners default to PowerShell; this step is bash
@@ -198,7 +211,20 @@ jobs:
           exit 1
 
       - name: Build Theia (production)
-        run: yarn workspace rovant-extension build && yarn workspace rovant-app build:prod
+        shell: bash
+        run: |
+          # `theia build` re-runs electron/install.js, which fetches from
+          # github.com/electron/electron/releases — a host that intermittently 5xx's.
+          # Retry the build rather than failing the whole release on it.
+          for i in 1 2 3 4; do
+            if yarn workspace rovant-extension build && yarn workspace rovant-app build:prod; then
+              echo "build ok"; exit 0
+            fi
+            echo "::warning::build attempt $i failed (likely a GitHub 5xx fetching Electron) — retrying in 30s"
+            sleep 30
+          done
+          echo "::error::theia build failed 4 times"
+          exit 1
 
       - name: Download IDE plugins (language grammars)
         shell: bash   # Windows runners default to PowerShell; this step is bash
