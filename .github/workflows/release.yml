@@ -40,7 +40,7 @@ jobs:
       - name: Bundle clangd (Linux x64)
         run: |
           mkdir -p resources/clangd
-          curl -fsSL "https://github.com/clangd/clangd/releases/download/18.1.3/clangd-linux-18.1.3.zip" \
+          curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors "https://github.com/clangd/clangd/releases/download/18.1.3/clangd-linux-18.1.3.zip" \
             -o /tmp/clangd.zip
           unzip -q /tmp/clangd.zip -d /tmp/clangd-bin
           cp /tmp/clangd-bin/clangd_18.1.3/bin/clangd resources/clangd/
@@ -55,9 +55,9 @@ jobs:
       - name: Bundle vendor JS (offline Three.js + roslibjs)
         run: |
           mkdir -p resources/vendor
-          curl -fsSL "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" \
+          curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" \
             -o resources/vendor/three.min.js
-          curl -fsSL "https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.3.0/roslib.min.js" \
+          curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors "https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.3.0/roslib.min.js" \
             -o resources/vendor/roslib.min.js
 
       - name: Prefetch Electron binary (retrying)
@@ -100,7 +100,7 @@ jobs:
             dest="rovant-app/plugins/$id"
             rm -rf "$dest" /tmp/p.vsix /tmp/px
             mkdir -p "$dest"
-            curl -fsSL --retry 5 --retry-delay 3 "$url" -o /tmp/p.vsix
+            curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors --retry 5 --retry-delay 3 "$url" -o /tmp/p.vsix
             unzip -q -o /tmp/p.vsix -d /tmp/px
             cp -r /tmp/px/extension/. "$dest"/
             test -f "$dest/package.json" || { echo "::error::$id has no package.json"; exit 1; }
@@ -237,7 +237,7 @@ jobs:
             dest="rovant-app/plugins/$id"
             rm -rf "$dest" /tmp/p.vsix /tmp/px
             mkdir -p "$dest"
-            curl -fsSL --retry 5 --retry-delay 3 "$url" -o /tmp/p.vsix
+            curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors --retry 5 --retry-delay 3 "$url" -o /tmp/p.vsix
             unzip -q -o /tmp/p.vsix -d /tmp/px
             cp -r /tmp/px/extension/. "$dest"/
             test -f "$dest/package.json" || { echo "::error::$id has no package.json"; exit 1; }
