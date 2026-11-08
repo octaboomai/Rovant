@@ -356,7 +356,7 @@ footer{
       <p class="tagline">Zero-setup robotics tooling</p>
       <p class="sub">Build, preview and debug robot software without fighting your environment. Public beta — honest about what works and what doesn't yet.</p>
       <div class="ctas">
-        <a target="_blank" rel="noopener" class="btn btn-primary btn-lg" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe">
+        <a target="_blank" rel="noopener" class="btn btn-primary btn-lg" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe">
           Download for Windows
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>
         </a>
@@ -366,13 +366,13 @@ footer{
         </a>
       </div>
       <p class="platform-links">
-        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe">Windows .exe</a>
+        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe">Windows .exe</a>
         <span>·</span>
-        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb">Ubuntu .deb</a>
+        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-desktop_0.2.1_amd64.deb">Ubuntu .deb</a>
         <span>·</span>
-        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage">AppImage</a>
+        <a target="_blank" rel="noopener" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.1/Rovant-0.2.1.AppImage">AppImage</a>
       </p>
-      <p class="meta-strip">Version: 0.2.0-beta · Apache 2.0 · octaboomai</p>
+      <p class="meta-strip">Version: 0.2.1-beta · Apache 2.0 · octaboomai</p>
     </div>
 
     <!-- PRODUCT WINDOW -->
@@ -541,21 +541,21 @@ footer{
     <div class="tabpanel" role="tabpanel" id="panel-win" aria-labelledby="tab-win">
       <div class="snippet">
         <button class="copy" data-copy="#cmd-win">Copy</button>
-        <div id="cmd-win"><span class="p"># and run the installer</span><br>Invoke-WebRequest -Uri "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe" -OutFile "$env:USERPROFILE\Downloads\rovant-setup.exe"; &amp; "$env:USERPROFILE\Downloads\rovant-setup.exe"</div>
+        <div id="cmd-win"><span class="p"># and run the installer</span><br>Invoke-WebRequest -Uri "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe" -OutFile "$env:USERPROFILE\Downloads\rovant-setup.exe"; &amp; "$env:USERPROFILE\Downloads\rovant-setup.exe"</div>
       </div>
     </div>
 
     <div class="tabpanel" role="tabpanel" id="panel-deb" aria-labelledby="tab-deb" hidden>
       <div class="snippet">
         <button class="copy" data-copy="#cmd-deb">Copy</button>
-        <div id="cmd-deb"><span class="p"># and install the Debian package</span><br>wget https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb &amp;&amp; sudo apt install ./rovant-desktop_0.2.0_amd64.deb</div>
+        <div id="cmd-deb"><span class="p"># and install the Debian package</span><br>wget https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-desktop_0.2.1_amd64.deb &amp;&amp; sudo apt install ./rovant-desktop_0.2.1_amd64.deb</div>
       </div>
     </div>
 
     <div class="tabpanel" role="tabpanel" id="panel-app" aria-labelledby="tab-app" hidden>
       <div class="snippet">
         <button class="copy" data-copy="#cmd-app">Copy</button>
-        <div id="cmd-app"><span class="p"># download, make executable, run</span><br>wget https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage &amp;&amp; chmod +x Rovant-0.2.0.AppImage &amp;&amp; ./Rovant-0.2.0.AppImage</div>
+        <div id="cmd-app"><span class="p"># download, make executable, run</span><br>wget https://github.com/octaboomai/Rovant/releases/download/v0.2.1/Rovant-0.2.1.AppImage &amp;&amp; chmod +x Rovant-0.2.1.AppImage &amp;&amp; ./Rovant-0.2.1.AppImage</div>
       </div>
     </div>
 
@@ -576,7 +576,7 @@ footer{
         <span class="no">1</span>
         <div>
           <h3>Download the installer</h3>
-          <p>Chrome saves <code>rovant-0.2.0-windows-x64.exe</code>. If it says the file isn't commonly downloaded, that's the unsigned build — choose <strong>Keep</strong>.</p>
+          <p>Chrome saves <code>rovant-0.2.1-windows-x64.exe</code>. If it says the file isn't commonly downloaded, that's the unsigned build — choose <strong>Keep</strong>.</p>
           <img src="img/install-1-open-file.png" alt="Download the installer" loading="lazy" />
         </div>
       </li>
@@ -724,9 +724,9 @@ footer{
 
   /* ── links: resolve from the releases API, fall back to pinned URLs ── */
   var PINNED = {
-    win: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe',
-    deb: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb',
-    app: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage'
+    win: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe',
+    deb: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-desktop_0.2.1_amd64.deb',
+    app: 'https://github.com/octaboomai/Rovant/releases/download/v0.2.1/Rovant-0.2.1.AppImage'
   };
   fetch('https://api.github.com/repos/octaboomai/Rovant/releases/latest', {headers:{'Accept':'application/vnd.github+json'}})
     .then(function(r){ return r.ok ? r.json() : null; })
