@@ -60,6 +60,19 @@ jobs:
           curl -fsSL "https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.3.0/roslib.min.js" \
             -o resources/vendor/roslib.min.js
 
+      - name: Prefetch Electron binary (retrying)
+        shell: bash
+        run: |
+          for i in 1 2 3 4 5 6; do
+            if node node_modules/electron/install.js; then
+              echo "electron binary ready"; exit 0
+            fi
+            echo "::warning::electron download attempt $i failed — retrying in 20s"
+            sleep 20
+          done
+          echo "::error::could not download the Electron binary after 6 attempts (GitHub releases 5xx)"
+          exit 1
+
       - name: Build Theia (production)
         run: yarn workspace rovant-extension build && yarn workspace rovant-app build:prod
 
@@ -170,6 +183,19 @@ jobs:
           New-Item -ItemType Directory -Force -Path resources/vendor
           Invoke-WebRequest "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" -OutFile resources/vendor/three.min.js -UseBasicParsing
           Invoke-WebRequest "https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.3.0/roslib.min.js" -OutFile resources/vendor/roslib.min.js -UseBasicParsing
+
+      - name: Prefetch Electron binary (retrying)
+        shell: bash
+        run: |
+          for i in 1 2 3 4 5 6; do
+            if node node_modules/electron/install.js; then
+              echo "electron binary ready"; exit 0
+            fi
+            echo "::warning::electron download attempt $i failed — retrying in 20s"
+            sleep 20
+          done
+          echo "::error::could not download the Electron binary after 6 attempts (GitHub releases 5xx)"
+          exit 1
 
       - name: Build Theia (production)
         run: yarn workspace rovant-extension build && yarn workspace rovant-app build:prod
