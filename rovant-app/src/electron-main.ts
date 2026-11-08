@@ -97,6 +97,24 @@ function showSplash(): void {
     splashWindow.center();
 }
 
+// ── Backend process diagnostics ───────────────────────────────────────────────
+const backendLogTail: string[] = [];
+const THEIA_BOOT_TIMEOUT_MS = 60_000;
+
+function backendLogPath(): string {
+    return path.join(app.getPath('userData'), 'logs', 'backend.log');
+}
+
+function openBackendLog(): fs.WriteStream | undefined {
+    try {
+        const dir = path.join(app.getPath('userData'), 'logs');
+        fs.mkdirSync(dir, { recursive: true });
+        return fs.createWriteStream(backendLogPath(), { flags: 'a' });
+    } catch {
+        return undefined;
+    }
+}
+
 // ── FIX #1: Spawn Theia backend and wait for it ───────────────────────────────
 async function startTheiaBackend(): Promise<void> {
     const backendMain = path.join(__dirname, '..', 'backend', 'main.js');
@@ -126,14 +144,65 @@ async function startTheiaBackend(): Promise<void> {
         '--hostname=127.0.0.1',
         `--port=${port}`,
         `--root-dir=${defaultWorkspace()}`,
-    ], { env, stdio: 'pipe' });
+    ], {
+        env,
+        // stdout MUST be piped AND drained. With `stdio: 'pipe'` and nothing reading
+        // stdout, the backend blocks once the OS pipe buffer fills (~64 KB Linux,
+        // ~4 KB Windows) and never reaches the point of listening — which surfaced
+        // as "port did not open" after the full timeout.
+        stdio: ['ignore', 'pipe', 'pipe'],
+    });
 
+    // Keep the tail of the backend's output so a failed boot can say WHY.
+    backendLogTail.length = 0;
+    const backendLog = openBackendLog();
+    const record = (stream: string, chunk: Buffer): void => {
+        const text = chunk.toString();
+        for (const line of text.split(/\r?\n/)) {
+            const trimmed = line.trimEnd();
+            if (!trimmed) continue;
+            backendLogTail.push(trimmed);
+            if (backendLogTail.length > 40) backendLogTail.shift();
+            backendLog?.write(`[${stream}] ${trimmed}\n`);
+        }
+    };
+    theiaProcess.stdout?.on('data', (d: Buffer) => record('out', d));
+    theiaProcess.stderr?.on('data', (d: Buffer) => record('err', d));
+    backendLog?.write(`\n=== backend start ${new Date().toISOString()} port=${port} ===\n`);
+
+    // A plain `let` assigned only inside a callback is narrowed to `undefined` by TS,
+    // so the state lives in an object the compiler cannot narrow away.
+    const exitState: { code?: number | null; signal?: NodeJS.Signals | null } = {};
     theiaProcess.on('error', err => console.error('[Rovant backend]', err));
-    theiaProcess.stderr?.on('data', d => console.error('[Rovant backend]', d.toString().trim()));
+    theiaProcess.on('exit', (code, signal) => { exitState.code = code; exitState.signal = signal; });
 
-    // Wait up to 45 s for the backend to accept connections
-    await waitForPort(port, 45_000);
-    (app as any)._theiaPort = port;   // share port with createWindow
+    // Wait for the port, but fail fast if the backend dies instead of burning 45 s.
+    const deadline = Date.now() + THEIA_BOOT_TIMEOUT_MS;
+    while (Date.now() < deadline) {
+        if (exitState.code !== undefined) {
+            backendLog?.end();
+            throw new Error(
+                `Theia backend exited (code ${exitState.code}, signal ${exitState.signal}) before opening port ${port}.` +
+                (backendLogTail.length ? `\n\nLast output:\n${backendLogTail.slice(-12).join('\n')}` : '')
+            );
+        }
+        try {
+            await waitForPort(port, 1_500);
+            backendLog?.write(`=== backend ready on ${port} ===\n`);
+            backendLog?.end();
+            (app as any)._theiaPort = port;   // share port with createWindow
+            return;
+        } catch {
+            /* not up yet — keep waiting until the deadline */
+        }
+    }
+
+    backendLog?.end();
+    throw new Error(
+        `Theia backend did not open port ${port} within ${THEIA_BOOT_TIMEOUT_MS / 1000}s.` +
+        (backendLogTail.length ? `\n\nLast output:\n${backendLogTail.slice(-12).join('\n')}` : '') +
+        `\n\nFull log: ${backendLogPath()}`
+    );
 }
 
 
