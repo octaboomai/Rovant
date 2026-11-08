@@ -43,7 +43,7 @@
   "devDependencies": {
     "@theia/cli": "1.76.0",
     "electron": "42.8.1",
-    "electron-updater": "^6.3.9"
+    "electron-updater": "^6.8.11"
   },
   "theia": {
     "target": "electron",
