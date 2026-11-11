@@ -92,7 +92,37 @@ header{
 .icon-btn{width:34px;height:34px;padding:0;border-radius:7px}
 
 /* ── hero ───────────────────────────────────────────── */
-.hero{padding:76px 0 0;text-align:center}
+.hero{padding:76px 0 0;text-align:center;position:relative;isolation:isolate}
+
+/* Rotating wireframe diagram (from the URDF preview) sitting behind the hero copy */
+.hero-diagram{
+  position:absolute;left:50%;top:-70px;width:min(820px,104vw);aspect-ratio:300/320;
+  transform:translateX(-50%);z-index:-1;pointer-events:none;user-select:none;
+  opacity:.15;mix-blend-mode:screen;filter:blur(1.1px) saturate(1.15);
+  -webkit-mask-image:radial-gradient(circle at 50% 48%,#000 18%,rgba(0,0,0,.45) 46%,transparent 68%);
+          mask-image:radial-gradient(circle at 50% 48%,#000 18%,rgba(0,0,0,.45) 46%,transparent 68%);
+  animation:heroSpin 72s linear infinite;
+}
+.hero-diagram img{display:block;width:100%;height:100%;object-fit:contain}
+@keyframes heroSpin{
+  from{transform:translateX(-50%) rotate(0deg)}
+  to  {transform:translateX(-50%) rotate(360deg)}
+}
+@media (prefers-reduced-motion:reduce){.hero-diagram{animation:none}}
+@media (max-width:640px){.hero-diagram{opacity:.11;top:-30px;width:118vw}}
+
+/* Real product demo — replaces the hand-built mock window */
+.demo{margin:52px auto 0;max-width:1120px}
+.demo picture{display:block}
+.demo img{
+  display:block;width:100%;height:auto;border-radius:11px;
+  border:1px solid var(--border);background:var(--surface);
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 30px 80px -30px rgba(0,0,0,.9);
+}
+.demo figcaption{
+  margin-top:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  color:var(--muted);text-align:center;
+}
 .eyebrow{
   display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;
   border:1px solid var(--border);background:var(--surface-subtle);
@@ -120,57 +150,6 @@ h1{
   font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;color:var(--muted);
   text-transform:uppercase;margin-top:22px;
 }
-
-/* ── product window ─────────────────────────────────── */
-.window{
-  margin:52px auto 0;max-width:1120px;border:1px solid var(--border);border-radius:11px;
-  background:var(--surface);overflow:hidden;
-  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 30px 80px -30px rgba(0,0,0,.9);
-}
-.titlebar{
-  display:flex;align-items:center;gap:12px;padding:0 14px;height:40px;
-  background:var(--surface-subtle);border-bottom:1px solid var(--border-subtle);
-}
-.dots{display:flex;gap:6px}
-.dots i{width:9px;height:9px;border-radius:50%;display:block}
-.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
-.crumb{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.crumb b{color:var(--text);font-weight:500}
-.chip{
-  margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
-  padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--text);
-  background:var(--surface-card);white-space:nowrap;text-transform:uppercase;
-}
-.workspace{display:grid;grid-template-columns:186px minmax(0,1fr) 260px;min-height:340px}
-.side{background:var(--surface-subtle);border-right:1px solid var(--border-subtle);padding:12px 0;font-family:var(--mono);font-size:11.5px}
-.side .label{font-size:9px;letter-spacing:.12em;color:var(--muted);padding:0 14px 8px;text-transform:uppercase}
-.tree div{padding:4px 14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tree div.active{color:var(--strong);background:var(--surface-elevated);border-left:2px solid var(--accent)}
-.tree .ind{padding-left:26px}
-.editor{background:var(--code-bg);display:flex;flex-direction:column;min-width:0}
-.tabs{display:flex;background:var(--surface-subtle);border-bottom:1px solid var(--border-subtle);font-family:var(--mono);font-size:11px;overflow:hidden}
-.tabs span{padding:8px 14px;color:var(--muted);border-right:1px solid var(--border-subtle);white-space:nowrap}
-.tabs span.on{color:var(--text-bright);background:var(--code-bg);border-top:1px solid var(--accent)}
-.code{padding:12px 0;font-family:var(--mono);font-size:12px;line-height:1.75;overflow-x:auto;flex:1}
-.code .ln{display:flex;gap:14px;padding:0 14px;white-space:pre}
-.code .n{color:#3A3A46;user-select:none;width:18px;text-align:right;flex:none}
-.k{color:#C9A8FF}.s{color:#9BE8B0}.c{color:#5A5A6A}.f{color:#8FD3FF}.t{color:#EDEDF2}.num{color:#FFC98A}
-.banner{
-  margin:0 12px 12px;padding:8px 11px;border-radius:6px;display:flex;align-items:center;gap:9px;
-  background:rgba(16,201,128,.06);border:1px solid rgba(16,201,128,.22);
-  font-family:var(--mono);font-size:10.5px;color:#9BE8B0;letter-spacing:.02em;
-}
-.viewport{background:var(--surface-subtle);border-left:1px solid var(--border-subtle);padding:12px;display:flex;flex-direction:column;gap:10px}
-.vlabel{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-.urdf{flex:1;border:1px solid var(--border-subtle);border-radius:6px;background:var(--code-bg);display:grid;place-items:center;min-height:150px;position:relative;overflow:hidden}
-.topic{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;padding:5px 8px;border-radius:4px;background:var(--surface-card);color:var(--text)}
-.topic b{color:var(--success);font-weight:500}
-.terminal{
-  grid-column:1/-1;background:var(--surface-subtle);border-top:1px solid var(--border-subtle);
-  padding:11px 14px;font-family:var(--mono);font-size:11.5px;color:var(--text);line-height:1.7;
-}
-.terminal .ok{color:var(--success)}
-.terminal .dim{color:var(--muted)}
 
 /* ── sections ───────────────────────────────────────── */
 section{padding:88px 0 0}
@@ -274,7 +253,6 @@ footer{
 .flinks{display:flex;gap:20px;flex-wrap:wrap}
 .flinks a:hover{color:var(--text-bright)}
 
-
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:22px;counter-reset:s}
 .step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;align-items:start;
   border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:20px;
@@ -289,16 +267,12 @@ footer{
 .step code{font-family:var(--mono);font-size:12.5px;background:var(--surface-elevated);padding:2px 5px;border-radius:4px;color:var(--text-bright)}
 @media(max-width:560px){.step{grid-template-columns:1fr}.step .no{margin-bottom:4px}}
 @media(max-width:1024px){
-  .workspace{grid-template-columns:170px minmax(0,1fr)}
-  .viewport{display:none}
-  .cards{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
   .navlinks{display:none}
 }
 @media(max-width:768px){
   .hero{padding-top:52px}
-  .workspace{grid-template-columns:1fr}
-  .side{display:none}
-  .matrix{grid-template-columns:1fr}
+      .matrix{grid-template-columns:1fr}
   section{padding-top:64px}
   footer{flex-direction:column;align-items:flex-start}
 }
@@ -351,7 +325,13 @@ footer{
   <!-- HERO -->
   <div class="wrap">
     <div class="hero">
-      <span class="eyebrow">ROS 2 / WINDOWS / OPEN SOURCE</span>
+        <div class="hero-diagram" aria-hidden="true">
+          <picture>
+            <source srcset="img/diagram.webp" type="image/webp" />
+            <img src="img/diagram.gif" alt="" width="300" height="320" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <span class="eyebrow">ROS 2 / WINDOWS / OPEN SOURCE</span>
       <h1>ROS 2 that actually works on Windows.</h1>
       <p class="tagline">Zero-setup robotics tooling</p>
       <p class="sub">Build, preview and debug robot software without fighting your environment. Public beta — honest about what works and what doesn't yet.</p>
@@ -375,81 +355,16 @@ footer{
       <p class="meta-strip">Version: 0.2.0-beta · Apache 2.0 · octaboomai</p>
     </div>
 
-    <!-- PRODUCT WINDOW -->
-    <div class="window" role="img" aria-label="Rovant workspace showing a ROS 2 Python node, a URDF preview and a build terminal">
-      <div class="titlebar">
-        <span class="dots"><i></i><i></i><i></i></span>
-        <span class="crumb"><b>rovant_ws</b> › src › drone_teleop.py</span>
-        <span class="chip">WSL2 · ROS 2 Humble</span>
-      </div>
-      <div class="workspace">
-        <div class="side">
-          <div class="label">Explorer</div>
-          <div class="tree">
-            <div>▾ src/</div>
-            <div class="ind">package.xml</div>
-            <div class="ind active">drone_teleop.py</div>
-            <div class="ind">quadrotor.urdf</div>
-            <div class="ind">CMakeLists.txt</div>
-          </div>
-        </div>
-        <div class="editor">
-          <div class="tabs"><span class="on">drone_teleop.py</span><span>quadrotor.urdf</span></div>
-          <div class="code">
-            <div class="ln"><span class="n">1</span><span><span class="k">import</span> rclpy</span></div>
-            <div class="ln"><span class="n">2</span><span><span class="k">from</span> geometry_msgs.msg <span class="k">import</span> Twist</span></div>
-            <div class="ln"><span class="n">3</span><span></span></div>
-            <div class="ln"><span class="n">4</span><span><span class="k">class</span> <span class="f">DroneController</span>(rclpy.node.<span class="f">Node</span>):</span></div>
-            <div class="ln"><span class="n">5</span><span>    <span class="k">def</span> <span class="f">__init__</span>(self):</span></div>
-            <div class="ln"><span class="n">6</span><span>        <span class="f">super</span>().<span class="f">__init__</span>(<span class="s">'drone_teleop'</span>)</span></div>
-            <div class="ln"><span class="n">7</span><span>        self.pub = self.<span class="f">create_publisher</span>(Twist, <span class="s">'/cmd_vel'</span>, <span class="num">10</span>)</span></div>
-            <div class="ln"><span class="n">8</span><span>        self.<span class="f">create_timer</span>(<span class="num">0.02</span>, self.<span class="f">tick</span>)  <span class="c"># 50 Hz</span></span></div>
-            <div class="ln"><span class="n">9</span><span></span></div>
-            <div class="ln"><span class="n">10</span><span>    <span class="k">def</span> <span class="f">tick</span>(self):</span></div>
-            <div class="ln"><span class="n">11</span><span>        msg = <span class="f">Twist</span>()</span></div>
-            <div class="ln"><span class="n">12</span><span>        msg.linear.x = <span class="num">0.5</span></span></div>
-            <div class="ln"><span class="n">13</span><span>        self.pub.<span class="f">publish</span>(msg)</span></div>
-          </div>
-          <div class="banner">
-            <span style="color:var(--success)">◈</span>
-            <span>ROS 2 ACTION: Live topic streaming attached to /cmd_vel (50 Hz)</span>
-          </div>
-        </div>
-        <div class="viewport">
-          <div class="vlabel">URDF Preview</div>
-          <div class="urdf">
-            <svg viewBox="0 0 200 140" width="100%" height="100%" aria-hidden="true">
-              <g stroke="rgba(255,255,255,.10)" stroke-width=".6">
-                <path d="M20 120 L100 110 M100 110 L180 120 M100 110 L100 40"/>
-                <path d="M100 40 L40 60 M100 40 L160 60"/>
-              </g>
-              <g stroke="#EDEDF2" stroke-width="1.2" fill="none">
-                <path d="M100 110 L100 60"/><path d="M60 92 L140 92"/><path d="M60 92 L40 60"/><path d="M140 92 L160 60"/>
-              </g>
-              <g fill="none" stroke-width="1.6">
-                <circle cx="100" cy="110" r="4" stroke="#EDEDF2"/>
-                <circle cx="40" cy="60" r="11" stroke="#8FD3FF"/>
-                <circle cx="160" cy="60" r="11" stroke="#8FD3FF"/>
-                <circle cx="60" cy="92" r="7" stroke="#9BE8B0"/>
-                <circle cx="140" cy="92" r="7" stroke="#9BE8B0"/>
-              </g>
-              <g font-family="JetBrains Mono,monospace" font-size="7">
-                <text x="106" y="128" fill="#FF6B6B">X</text>
-                <text x="128" y="106" fill="#10C980">Y</text>
-                <text x="90" y="48" fill="#8FD3FF">Z</text>
-              </g>
-            </svg>
-          </div>
-          <div class="vlabel">Topics</div>
-          <div class="topic"><span>/cmd_vel</span><b>50 Hz</b></div>
-          <div class="topic"><span>/odom</span><b>100 Hz</b></div>
-        </div>
-        <div class="terminal">
-          <div><span class="ok">✓</span> ROS 2 Humble detected (WSL2) <span class="dim">·</span> colcon build: finished in 12.4s</div>
-          <div class="dim">→ node drone_teleop started · publishing /cmd_vel at 50 Hz</div>
-        </div>
-      </div>
-    </div>
+    <!-- PRODUCT DEMO — a real recording, not a mockup -->
+    <figure class="demo">
+      <picture>
+        <source srcset="img/demo.webp" type="image/webp" />
+        <img src="img/demo.gif"
+             alt="Rovant showing a ROS 2 launch file in the editor beside a live URDF preview, orbiting a robot model"
+             width="720" height="364" loading="eager" decoding="async" />
+      </picture>
+      <figcaption>ROS 2 launch file beside the live URDF preview — no environment setup.</figcaption>
+    </figure>
   </div>
 
   <!-- 01 DIAGNOSIS -->
