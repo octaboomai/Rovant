@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" fill="none" role="img" aria-label="Wireframe robot link frames and joint axes">
+  <defs>
+    <radialGradient id="sphere" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#B9A6FF"/>
+      <stop offset="55%" stop-color="#7A5CF0"/>
+      <stop offset="100%" stop-color="#3B2A96"/>
+    </radialGradient>
+    <linearGradient id="boxCyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7DF3FF"/>
+      <stop offset="100%" stop-color="#1FB6CC"/>
+    </linearGradient>
+    <linearGradient id="boxAmber" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFE07A"/>
+      <stop offset="100%" stop-color="#D4A521"/>
+    </linearGradient>
+  </defs>
+
+  <!-- reference grid -->
+  <g stroke="#2A3B4A" stroke-width="1" opacity=".55">
+    <path d="M-40 300 L640 300 M300 -40 L300 640"/>
+    <path d="M-90 180 L690 420 M-90 420 L690 180" opacity=".5"/>
+    <path d="M-60 60 L660 540 M-60 540 L660 60" opacity=".3"/>
+  </g>
+
+  <!-- primary link frame (cyan) -->
+  <g stroke="url(#boxCyan)" stroke-width="2.6" stroke-linejoin="round">
+    <rect x="196" y="150" width="150" height="300" rx="2"/>
+    <rect x="186" y="164" width="150" height="300" rx="2" opacity=".45"/>
+    <path d="M196 150 L336 450 M346 150 L206 450" opacity=".8"/>
+    <path d="M196 300 L346 300" opacity=".6"/>
+  </g>
+
+  <!-- secondary link frame (amber) -->
+  <g stroke="url(#boxAmber)" stroke-width="2.2" stroke-linejoin="round" opacity=".95">
+    <rect x="330" y="238" width="118" height="150" rx="2"/>
+    <path d="M330 238 L448 388 M448 238 L330 388"/>
+    <path d="M330 313 L448 313" opacity=".6"/>
+  </g>
+
+  <!-- joint 1 — gear ring, top -->
+  <g stroke="#4D8DF0" stroke-width="2.2" transform="translate(252 148)">
+    <circle r="44"/><circle r="30" opacity=".75"/><circle r="13" opacity=".55"/>
+    <g stroke-width="2">
+      <path d="M0 -56 L0 -44 M0 44 L0 56 M-56 0 L-44 0 M44 0 L56 0"/>
+      <path d="M-40 -40 L-31 -31 M31 31 L40 40 M40 -40 L31 -31 M-31 31 L-40 40"/>
+      <path d="M-21 -51 L-16 -40 M21 51 L16 40 M51 -21 L40 -16 M-51 21 L-40 16"/>
+      <path d="M-21 51 L-16 40 M21 -51 L16 -40 M51 21 L40 16 M-51 -21 L-40 -16"/>
+    </g>
+  </g>
+
+  <!-- joint 2 — gear ring, bottom -->
+  <g stroke="#35D08A" stroke-width="2.2" transform="translate(258 452)">
+    <circle r="40"/><circle r="27" opacity=".75"/><circle r="11" opacity=".55"/>
+    <g stroke-width="2">
+      <path d="M0 -52 L0 -40 M0 40 L0 52 M-52 0 L-40 0 M40 0 L52 0"/>
+      <path d="M-37 -37 L-28 -28 M28 28 L37 37 M37 -37 L28 -28 M-28 28 L-37 37"/>
+      <path d="M-19 -47 L-15 -37 M19 47 L15 37 M47 -19 L37 -15 M-47 19 L-37 15"/>
+      <path d="M-19 47 L-15 37 M19 -47 L15 -37 M47 19 L37 15 M-47 -19 L-37 -15"/>
+    </g>
+  </g>
+
+  <!-- joint 3 — small ring, right -->
+  <g stroke="#7DF3FF" stroke-width="2" transform="translate(462 330)">
+    <circle r="24"/><circle r="14" opacity=".7"/>
+    <g stroke-width="1.8">
+      <path d="M0 -32 L0 -24 M0 24 L0 32 M-32 0 L-24 0 M24 0 L32 0"/>
+      <path d="M-22 -22 L-17 -17 M17 17 L22 22 M22 -22 L17 -17 M-17 17 L-22 22"/>
+    </g>
+  </g>
+
+  <!-- sensor sphere -->
+  <circle cx="256" cy="300" r="26" fill="url(#sphere)" stroke="#9C86FF" stroke-width="1.4"/>
+
+  <!-- joint axes -->
+  <g stroke-width="2.6" stroke-linecap="round">
+    <path d="M300 330 L470 344" stroke="#FF5A5A"/>
+    <path d="M300 330 L188 372" stroke="#35D08A"/>
+    <path d="M300 330 L300 168" stroke="#4D8DF0"/>
+  </g>
+</svg>

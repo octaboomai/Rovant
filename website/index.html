@@ -96,12 +96,14 @@ header{
 
 /* Rotating wireframe diagram (from the URDF preview) sitting behind the hero copy */
 .hero-diagram{
-  position:absolute;left:50%;top:-70px;width:min(820px,104vw);aspect-ratio:300/320;
+  position:absolute;left:50%;top:-84px;width:min(780px,98vw);aspect-ratio:1/1;
   transform:translateX(-50%);z-index:-1;pointer-events:none;user-select:none;
-  opacity:.15;mix-blend-mode:screen;filter:blur(1.1px) saturate(1.15);
-  -webkit-mask-image:radial-gradient(circle at 50% 48%,#000 18%,rgba(0,0,0,.45) 46%,transparent 68%);
-          mask-image:radial-gradient(circle at 50% 48%,#000 18%,rgba(0,0,0,.45) 46%,transparent 68%);
-  animation:heroSpin 72s linear infinite;
+  /* vector source — no blur, no upscaling, stays sharp on every display */
+  opacity:.40;
+  filter:drop-shadow(0 0 30px rgba(125,243,255,.18));
+  -webkit-mask-image:radial-gradient(ellipse 58% 50% at 50% 43%,#000 30%,rgba(0,0,0,.55) 60%,transparent 82%);
+          mask-image:radial-gradient(ellipse 58% 50% at 50% 43%,#000 30%,rgba(0,0,0,.55) 60%,transparent 82%);
+  animation:heroSpin 90s linear infinite;
 }
 .hero-diagram img{display:block;width:100%;height:100%;object-fit:contain}
 @keyframes heroSpin{
@@ -109,13 +111,12 @@ header{
   to  {transform:translateX(-50%) rotate(360deg)}
 }
 @media (prefers-reduced-motion:reduce){.hero-diagram{animation:none}}
-@media (max-width:640px){.hero-diagram{opacity:.11;top:-30px;width:118vw}}
+@media (max-width:640px){.hero-diagram{opacity:.34;top:-18px;width:132vw}}
 
 /* Real product demo — replaces the hand-built mock window */
 .demo{margin:52px auto 0;max-width:1120px}
-.demo picture{display:block}
-.demo img{
-  display:block;width:100%;height:auto;border-radius:11px;
+.demo video{
+  display:block;width:100%;height:auto;aspect-ratio:1600/810;border-radius:11px;
   border:1px solid var(--border);background:var(--surface);
   box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 30px 80px -30px rgba(0,0,0,.9);
 }
@@ -326,10 +327,7 @@ footer{
   <div class="wrap">
     <div class="hero">
         <div class="hero-diagram" aria-hidden="true">
-          <picture>
-            <source srcset="img/diagram.webp" type="image/webp" />
-            <img src="img/diagram.gif" alt="" width="300" height="320" loading="lazy" decoding="async" />
-          </picture>
+          <img src="img/diagram.svg" alt="" width="600" height="600" loading="eager" decoding="async" />
         </div>
         <span class="eyebrow">ROS 2 / WINDOWS / OPEN SOURCE</span>
       <h1>ROS 2 that actually works on Windows.</h1>
@@ -357,12 +355,12 @@ footer{
 
     <!-- PRODUCT DEMO — a real recording, not a mockup -->
     <figure class="demo">
-      <picture>
-        <source srcset="img/demo.webp" type="image/webp" />
-        <img src="img/demo.gif"
-             alt="Rovant showing a ROS 2 launch file in the editor beside a live URDF preview, orbiting a robot model"
-             width="720" height="364" loading="eager" decoding="async" />
-      </picture>
+      <video autoplay loop muted playsinline preload="metadata"
+             poster="img/demo-poster.jpg" width="1600" height="810"
+             aria-label="Rovant showing a ROS 2 launch file in the editor beside a live URDF preview, orbiting a robot model">
+        <source src="img/demo.webm" type="video/webm" />
+        <source src="img/demo.mp4"  type="video/mp4" />
+      </video>
       <figcaption>ROS 2 launch file beside the live URDF preview — no environment setup.</figcaption>
     </figure>
   </div>
