@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers / Pages deployment for the Rovant marketing site.
+  //
+  // This repo's root package.json builds an Electron desktop app. The website is
+  // already-finished static HTML/CSS/media under website/, so there is nothing to
+  // compile — this file tells wrangler to publish that folder as static assets and
+  // nothing else.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rovant",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./website"
+  }
+}
