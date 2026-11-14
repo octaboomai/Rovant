@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rovant vs installing ROS 2 on Windows yourself</title>
+<meta name="description" content="Two ways to get ROS 2 running on Windows: set up WSL2 and the ROS 2 apt repository by hand, or let Rovant detect and install it. What each one costs you, and when to do it manually." />
+<meta name="theme-color" content="#070709" />
+<link rel="canonical" href="https://rovant.dev/vs/wsl-ros/" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Rovant" />
+<meta property="og:title" content="Rovant vs installing ROS 2 on Windows yourself" />
+<meta property="og:description" content="The manual WSL2 + ROS 2 route gives you full control. Rovant automates it. Here is the honest comparison." />
+<meta property="og:url" content="https://rovant.dev/vs/wsl-ros/" />
+<meta property="og:image" content="https://rovant.dev/img/demo-poster.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/png" href="../../icon.png" />
+<link rel="apple-touch-icon" href="../../icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Rovant", "item": "https://rovant.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Rovant vs manual ROS 2 setup", "item": "https://rovant.dev/vs/wsl-ros/" }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Install ROS 2 on Windows with Rovant",
+      "description": "Get from a clean Windows install to a running ROS 2 topic list using Rovant.",
+      "totalTime": "PT15M",
+      "tool": [{ "@type": "HowToTool", "name": "Rovant" }],
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Install Rovant",
+          "text": "Download the Windows installer from the releases page and run it." },
+        { "@type": "HowToStep", "position": 2, "name": "Open the ROS 2 Toolchain panel",
+          "text": "Rovant scans for ROS 2 Humble, WSL2, colcon, rosbridge and the language servers, and reports what is present and what is missing." },
+        { "@type": "HowToStep", "position": 3, "name": "Press Install / repair",
+          "text": "Rovant installs the missing pieces inside WSL2 and streams the log as it goes." }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#070709;--surface:#0F0F13;--surface-card:#15151B;--surface-elevated:#1C1C24;
+  --border:rgba(255,255,255,.09);--border-subtle:rgba(255,255,255,.04);--border-hover:rgba(255,255,255,.35);
+  --strong:#FFFFFF;--text-bright:#EDEDF2;--text:#9E9EA8;--muted:#6B6B78;
+  --accent:#F1F5F9;--accent-glow:rgba(255,255,255,.12);--accent-text:#070709;
+  --success:#10C980;--warn:#F97316;
+  --maxw:860px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Space Grotesk","Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text-bright);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 50% -20%,rgba(255,255,255,.08),transparent 70%)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
+:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
+header{position:sticky;top:0;z-index:50;height:64px;background:rgba(7,7,9,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border-subtle)}
+.nav{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:16px}
+.brand img{border-radius:6px;display:block}
+.navlinks{display:flex;gap:22px;margin-left:auto;font-size:14px;color:var(--text)}
+.navlinks a:hover{color:var(--strong)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:7px;font-size:14px;font-weight:500;padding:9px 16px;cursor:pointer;border:1px solid var(--border);background:var(--surface-card);color:var(--text-bright);transition:background .15s,border-color .15s;font-family:var(--sans)}
+.btn:hover{background:var(--surface-elevated);border-color:var(--border-hover)}
+.btn-primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600}
+.btn-primary:hover{background:#fff;border-color:#fff;box-shadow:0 0 0 4px var(--accent-glow)}
+.btn-lg{padding:13px 22px;font-size:15px;border-radius:8px}
+.crumbs{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin:36px 0 0;text-transform:uppercase}
+.crumbs a:hover{color:var(--text-bright)}
+h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.08;font-size:clamp(30px,5vw,46px);margin:14px 0 0;background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.6) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-family:var(--display);font-weight:700;letter-spacing:-.022em;font-size:clamp(20px,3vw,26px);margin:44px 0 0;color:var(--strong)}
+h3{font-family:var(--display);font-weight:600;font-size:16px;margin:0 0 12px;color:var(--strong)}
+p{color:var(--text);margin:14px 0 0;font-size:15.5px}
+p.lead{color:var(--text-bright);font-size:17px;line-height:1.62;margin-top:20px}
+strong{color:var(--text-bright);font-weight:600}
+code{font-family:var(--mono);font-size:13px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:4px;padding:2px 6px;color:var(--text-bright)}
+.verdict{margin:30px 0 0;padding:20px 22px;border-radius:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--success)}
+.verdict .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--success);display:block;margin-bottom:8px}
+.verdict p{margin:0;color:var(--text-bright);font-size:15.5px}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.path{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px}
+.path .tag{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.path h3{margin-bottom:14px}
+.path ol{margin:0;padding-left:20px;display:grid;gap:9px}
+.path li{font-size:14px;color:var(--text);line-height:1.5}
+.path li code{font-size:12px}
+.path.rovant{border-top:2px solid var(--success)}
+.path.manual{border-top:2px solid var(--border-hover)}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border)}
+td:first-child{color:var(--text-bright);font-weight:500}
+td{color:var(--text)}
+.y{color:var(--success);font-family:var(--mono);font-size:13px}
+.n{color:var(--warn);font-family:var(--mono);font-size:13px}
+.part{color:var(--muted);font-family:var(--mono);font-size:12px}
+.cta{margin:44px 0 0;padding:26px;border-radius:11px;background:var(--surface);border:1px solid var(--border);text-align:center}
+.cta p{margin:0 0 18px;color:var(--text-bright);font-size:16px}
+.platform{font-size:13px;color:var(--muted);margin-top:14px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap;align-items:center}
+.platform a{color:var(--text);border-bottom:1px solid var(--border)}
+.platform a:hover{color:var(--strong);border-bottom-color:var(--border-hover)}
+.related{margin:40px 0 0;padding-top:22px;border-top:1px solid var(--border-subtle)}
+.related p{margin:0 0 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.related ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.related li a{color:var(--text-bright);border-bottom:1px solid var(--border-hover);font-size:14.5px}
+footer{margin-top:64px;border-top:1px solid var(--border-subtle);padding:30px 0 56px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--muted)}
+.flinks{display:flex;gap:18px;flex-wrap:wrap}
+.flinks a:hover{color:var(--text-bright)}
+@media(max-width:700px){.paths{grid-template-columns:1fr}.navlinks{display:none}table{font-size:13.5px}th,td{padding:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="../../index.html" aria-label="Rovant home"><img src="../../icon.png" alt="" width="24" height="24" />Rovant</a>
+    <div class="navlinks">
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#install">Download</a>
+      <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <a class="btn btn-primary" href="../../index.html#install">Download</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <p class="crumbs"><a href="../../index.html">Rovant</a> / Comparisons / Manual ROS 2 setup</p>
+  <h1>Rovant vs installing ROS 2 on Windows yourself</h1>
+
+  <p class="lead">There are two honest ways to get ROS 2 running on a Windows machine. You can install WSL2, add the ROS 2 apt repository and configure the environment by hand — which is free, fully documented and gives you complete control. Or you can let Rovant detect what is missing and install it. This page is about which one to pick.</p>
+
+  <div class="verdict">
+    <span class="k">Short answer</span>
+    <p>If you want a specific ROS 2 distribution, a custom build, or you simply want to understand every layer you are standing on, do it manually — the official documentation is good and you will learn more. If you want a robot model on screen and a topic list responding this afternoon, Rovant removes about a dozen steps that have nothing to do with robotics.</p>
+  </div>
+
+  <h2>The two paths, side by side</h2>
+  <div class="paths">
+    <div class="path manual">
+      <span class="tag">Manual</span>
+      <h3>WSL2 + ROS 2 by hand</h3>
+      <ol>
+        <li>Enable WSL2 with <code>wsl --install</code>, reboot</li>
+        <li>Install Ubuntu 22.04 as a distribution</li>
+        <li>Set the locale so ROS 2 tools do not warn</li>
+        <li>Install <code>curl</code>, <code>gnupg</code> and <code>lsb-release</code></li>
+        <li>Add the ROS 2 GPG key and apt source</li>
+        <li><code>apt install ros-humble-desktop</code></li>
+        <li>Source <code>/opt/ros/humble/setup.bash</code></li>
+        <li>Add that source line to <code>.bashrc</code></li>
+        <li>Install <code>rosbridge-suite</code> if you want live topics</li>
+        <li>Install <code>colcon</code> and any language servers</li>
+        <li>Verify with <code>ros2 topic list</code></li>
+      </ol>
+    </div>
+    <div class="path rovant">
+      <span class="tag">Rovant</span>
+      <h3>One installer</h3>
+      <ol>
+        <li>Run the Rovant installer</li>
+        <li>Open the <strong>ROS 2 Toolchain</strong> panel — it reports what is present and what is missing</li>
+        <li>Press <strong>Install / repair</strong> and watch the log</li>
+      </ol>
+      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">Rovant performs the same steps under the hood, inside WSL2. It does not hide them — the install log streams every command.</p>
+    </div>
+  </div>
+
+  <h2>What each approach gives you</h2>
+  <table>
+    <thead><tr><th>Consideration</th><th>Manual</th><th>Rovant</th></tr></thead>
+    <tbody>
+      <tr><td>Cost</td><td class="y">Free</td><td class="y">Free, Apache 2.0</td></tr>
+      <tr><td>Full control over the ROS 2 distribution</td><td class="y">✓</td><td class="n">Humble only</td></tr>
+      <tr><td>Works with a custom or source build</td><td class="y">✓</td><td class="n">✗</td></tr>
+      <tr><td>Time to first <code>ros2 topic list</code></td><td class="part">1–3 hours first time</td><td class="y">~15 minutes</td></tr>
+      <tr><td>Knows what is missing and why</td><td class="part">by reading docs</td><td class="y">✓ reports each tool</td></tr>
+      <tr><td>URDF / Xacro 3D preview</td><td class="n">✗ needs RViz or Gazebo</td><td class="y">✓ built in</td></tr>
+      <tr><td>Live topics without extra setup</td><td class="part">install rosbridge yourself</td><td class="y">✓ built in</td></tr>
+      <tr><td>Teaches you how ROS 2 is put together</td><td class="y">✓</td><td class="part">less so</td></tr>
+      <tr><td>Works on macOS</td><td class="part">Docker only</td><td class="n">✗</td></tr>
+    </tbody>
+  </table>
+
+  <h2>When to do it manually</h2>
+  <p>You need ROS 2 Iron, Jazzy or Rolling rather than Humble. You are building ROS 2 from source or using a custom middleware. You are on a machine where WSL2 is restricted by policy. You want to understand the environment because you will be maintaining it, teaching it, or debugging it at the shell. Or you simply prefer to own the setup — that is a legitimate reason and the official documentation supports it well.</p>
+
+  <h2>When to use Rovant</h2>
+  <p>You are on Windows and want to look at a robot description as a 3D model without installing RViz. You are learning ROS 2 and the environment is getting in the way of the actual concepts. You want colcon builds, topic inspection and your code in one window. You are demoing or teaching and cannot afford a setup session.</p>
+
+  <h2>What Rovant does not replace</h2>
+  <p>It is worth being direct: Rovant does not remove the need to understand ROS 2. It automates the installation, not the concepts. Nodes, topics, launch files and packages still have to be learned, and the official ROS 2 tutorials remain the right place to do that. Rovant is also Humble-specific today, so if your team standardises on a newer distribution you will want the manual path.</p>
+
+  <div class="cta">
+    <p>Rovant is a free, Apache 2.0 public beta for Windows and Linux.</p>
+    <a class="btn btn-primary btn-lg" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe" target="_blank" rel="noopener">Download for Windows</a>
+    <div class="platform">
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe" target="_blank" rel="noopener">Windows .exe</a>
+      <span>·</span>
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb" target="_blank" rel="noopener">Ubuntu .deb</a>
+      <span>·</span>
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage" target="_blank" rel="noopener">AppImage</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <p>Also worth reading</p>
+    <ul>
+      <li><a href="../vscode/">Rovant vs VS Code for ROS 2</a></li>
+      <li><a href="../../index.html#roadmap">What Rovant does today, and what has not shipped yet</a></li>
+      <li><a href="../../index.html#install">Installing Rovant on Windows</a></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="wrap">
+  <div>© 2026 Rovant · Apache 2.0</div>
+  <div class="flinks">
+    <a href="../../index.html">Home</a>
+    <a href="../../privacy.html">Privacy</a>
+    <a href="../../terms.html">Terms</a>
+    <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>

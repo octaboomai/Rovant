@@ -370,6 +370,41 @@ footer{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* plain text vs Rovant */
+.ba{margin-top:26px;border:1px solid var(--border);border-radius:11px;background:var(--surface);overflow:hidden;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 30px 80px -34px rgba(0,0,0,.9)}
+.ba-bar{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid var(--border-subtle);
+        background:var(--surface-subtle);flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--surface-card)}
+.segbtn{border:0;background:transparent;color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+        text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:background .15s,color .15s}
+.segbtn:hover{color:var(--strong)}
+.segbtn.is-on{background:var(--accent);color:var(--accent-text);font-weight:600}
+.ba-file{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ba-file .dot{width:6px;height:6px;border-radius:50%;background:var(--success);display:block}
+.ba-run{border:1px solid var(--border);background:var(--surface-card);color:var(--text-bright);border-radius:6px;
+        font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer;transition:background .15s,border-color .15s}
+.ba-run:hover{background:var(--surface-elevated);border-color:var(--border-hover)}
+.ba-run[disabled]{opacity:.45;cursor:default}
+.ba-pane{background:var(--code-bg)}
+.ba-code{margin:0;padding:18px 20px;font-family:var(--mono);font-size:13px;line-height:1.72;overflow-x:auto;
+         color:#6B7280;white-space:pre;tab-size:4}
+.ba-code.is-hi{color:var(--text-bright)}
+.ba-term{border-top:1px solid var(--border-subtle);background:#06060A;padding:0}
+.ba-term-head{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+              padding:9px 20px;border-bottom:1px solid var(--border-subtle)}
+.ba-term-body{padding:12px 20px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.8;min-height:52px}
+.ba-term-body div{color:var(--text)}
+.ba-term-body .ok{color:var(--success)}
+.ba-term-body .dim{color:var(--muted)}
+.ba-term-body .cur{color:var(--strong)}
+.ba-status{display:flex;align-items:center;gap:12px;padding:8px 14px;border-top:1px solid var(--border-subtle);
+           background:var(--surface-subtle);font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+.ba-status .lang{padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--text);text-transform:uppercase}
+.ba-status .lang.is-python{color:var(--success);border-color:rgba(16,201,128,.35)}
+.ba-status .right{margin-left:auto}
+@media(max-width:640px){.ba-code{font-size:11.5px;padding:14px}.ba-file{display:none}}
 </style>
 </head>
 <body>
@@ -469,10 +504,76 @@ footer{
     </div>
   </div></section>
 
-  <!-- 02 ARCHITECTURE -->
+  <!-- 02 PLAIN TEXT VS ROVANT -->
+  <section id="preview"><div class="wrap">
+    <div class="shead">
+      <span class="kicker">02 / The difference</span>
+      <h2>Plain text, or Rovant.</h2>
+      <p class="lede">Every editor opens a file. Not every editor knows what it is. This is the same ROS 2 node, rendered two ways.</p>
+    </div>
+
+    <div class="ba">
+      <div class="ba-bar">
+        <div class="seg" role="group" aria-label="How the file is rendered">
+          <button class="segbtn" data-mode="plain" aria-pressed="false">Plain text</button>
+          <button class="segbtn is-on" data-mode="rovant" aria-pressed="true">Rovant</button>
+        </div>
+        <div class="ba-file"><span class="dot"></span>drone_teleop.py</div>
+        <button class="ba-run" id="baRun" type="button">&#9654; Run</button>
+      </div>
+
+      <div class="ba-pane">
+        <pre class="ba-code" id="baPlain" hidden><code>import rclpy
+from rclpy.node import Node
+from geometry_msgs.msg import Twist
+ 
+ 
+class Teleop(Node):
+    """Publish velocity commands at 50 Hz."""
+ 
+    def __init__(self):
+        super().__init__("drone_teleop")
+        self.pub = self.create_publisher(Twist, "/cmd_vel", 10)
+        self.create_timer(0.02, self.tick)
+ 
+    def tick(self):
+        msg = Twist()
+        msg.linear.x = 0.5
+        self.pub.publish(msg)</code></pre>
+        <pre class="ba-code is-hi" id="baRovant"><code><span style="color:#FF7B9C">import</span> rclpy
+<span style="color:#FF7B9C">from</span> rclpy.node import Node
+<span style="color:#FF7B9C">from</span> geometry_msgs.msg import Twist
+ 
+ 
+<span style="color:#8FD3FF">class Teleop</span>(<span style="color:#E4E4EC">Node):</span>
+<span style="color:#9BE8B0">    """Publish velocity commands at 50 Hz."""</span>
+ 
+    def <span style="color:#8FD3FF">__init__</span>(self):
+        super().__init__("drone_teleop")
+        self.pub = self.create_publisher(Twist, "/cmd_vel", 10)
+        self.create_timer(0.02, self.tick)
+ 
+    def <span style="color:#8FD3FF">tick</span>(self):
+        msg = Twist()
+        msg.linear.x = <span style="color:#FFC66D">0.5</span>
+        self.pub.publish(msg)</code></pre>
+        <div class="ba-term" id="baTerm" hidden>
+          <div class="ba-term-head">Terminal &mdash; WSL2 &middot; ROS 2 Humble</div>
+          <div class="ba-term-body" id="baTermBody"></div>
+        </div>
+      </div>
+
+      <div class="ba-status">
+        <span class="lang" id="baLang">Plain Text</span>
+        <span class="right">UTF-8 &middot; LF &middot; ROS 2 Python</span>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- 03 ARCHITECTURE -->
   <section id="architecture"><div class="wrap">
     <div class="shead">
-      <span class="kicker">02 / Architecture</span>
+      <span class="kicker">03 / Architecture</span>
       <h2>What Rovant handles for you.</h2>
     </div>
     <div class="rows">
@@ -486,7 +587,7 @@ footer{
   <!-- 03 ROADMAP -->
   <section id="roadmap"><div class="wrap">
     <div class="shead">
-      <span class="kicker">03 / Roadmap honesty</span>
+      <span class="kicker">04 / Roadmap honesty</span>
       <h2>Works today / Coming soon.</h2>
       <p class="lede">This is a 0.1 beta. Everything below in the left column has been built and packaged; the right column has not shipped yet.</p>
     </div>
@@ -519,7 +620,7 @@ footer{
   <!-- 04 INSTALL -->
   <section id="install"><div class="wrap">
     <div class="shead">
-      <span class="kicker">04 / Install</span>
+      <span class="kicker">05 / Install</span>
       <h2>One command, or one click.</h2>
     </div>
 
@@ -558,7 +659,7 @@ footer{
 
   <section id="walkthrough"><div class="wrap">
     <div class="shead">
-      <span class="kicker">05 / Windows walkthrough</span>
+      <span class="kicker">06 / Windows walkthrough</span>
       <h2>What you'll see when you install.</h2>
       <p class="lede">The build is unsigned, so Windows warns you once. That's expected. Here is the entire flow, in order.</p>
     </div>
@@ -601,7 +702,7 @@ footer{
   <!-- 06 OSS -->
   <section id="limits"><div class="wrap">
     <div class="shead">
-      <span class="kicker">06 / Open source</span>
+      <span class="kicker">07 / Open source</span>
       <h2>Apache 2.0, no lock-in.</h2>
     </div>
     <div class="oss">
@@ -632,6 +733,7 @@ footer{
       <div class="flinks">
         <span>© <span id="yr">2026</span> octaboomai</span>
         <a href="vs/vscode/">vs VS Code</a>
+          <a href="vs/wsl-ros/">vs manual setup</a>
         <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
         <a href="https://github.com/octaboomai/Rovant/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
         <a href="#architecture">Docs</a>
@@ -736,6 +838,63 @@ footer{
       });
     })
     .catch(function(){ /* pinned URLs already in place — the page never breaks */ });
+  /* ── plain text vs Rovant ── */
+  (function(){
+    var plain = document.getElementById('baPlain'),
+        rova  = document.getElementById('baRovant'),
+        lang  = document.getElementById('baLang'),
+        term  = document.getElementById('baTerm'),
+        body  = document.getElementById('baTermBody'),
+        run   = document.getElementById('baRun');
+    if (!plain || !rova) return;
+
+    var btns = Array.prototype.slice.call(document.querySelectorAll('.segbtn'));
+    function setMode(mode){
+      var isR = mode === 'rovant';
+      plain.hidden = isR;
+      rova.hidden  = !isR;
+      rova.classList.toggle('is-hi', isR);
+      lang.textContent = isR ? 'Python' : 'Plain Text';
+      lang.classList.toggle('is-python', isR);
+      btns.forEach(function(b){
+        var on = b.dataset.mode === mode;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){ setMode(b.dataset.mode); });
+    });
+    setMode('rovant');   /* start in the Rovant rendering, matching the button state */
+
+    var LINES = [
+      ['$ ros2 run teleop drone_teleop', 'cur'],
+      ['[INFO] [drone_teleop]: publishing /cmd_vel at 50 Hz', 'dim'],
+      ['[INFO] [drone_teleop]: timer period 0.020 s', 'dim'],
+      ['\u2713 node running \u00b7 /cmd_vel active', 'ok']
+    ];
+    var running = false;
+    run.addEventListener('click', function(){
+      if (running) return;
+      running = true;
+      run.disabled = true;
+      term.hidden = false;
+      body.innerHTML = '';
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      LINES.forEach(function(pair, i){
+        var d = document.createElement('div');
+        d.className = pair[1];
+        d.textContent = pair[0];
+        var show = function(){
+          body.appendChild(d);
+          if (i === LINES.length - 1) { running = false; run.disabled = false; }
+        };
+        reduce ? show() : setTimeout(show, 340 * (i + 1));
+      });
+    });
+  })();
+
 })();
 </script>
 </body>

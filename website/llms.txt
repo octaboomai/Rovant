@@ -8,6 +8,7 @@ Rovant does not currently include AI code generation, IntelliSense, or a debugge
 
 - [Home](https://rovant.dev/): What Rovant is, what works today, what has not shipped, and download links for Windows, Ubuntu and AppImage.
 - [Rovant vs VS Code for ROS 2](https://rovant.dev/vs/vscode/): An honest feature comparison, including where VS Code is the better choice.
+- [Rovant vs installing ROS 2 on Windows yourself](https://rovant.dev/vs/wsl-ros/): The manual WSL2 and apt-repository route versus Rovant's detection and install. Includes when to do it manually.
 - [Privacy](https://rovant.dev/privacy.html): What data Rovant collects and what it does not.
 - [Terms](https://rovant.dev/terms.html): Licence and usage terms.
 - [Download help](https://rovant.dev/code-signing.html): Installing an unsigned beta build and getting past Windows SmartScreen.
