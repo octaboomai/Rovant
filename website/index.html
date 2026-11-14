@@ -3,13 +3,83 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rovant — ROS 2 development that works on Windows</title>
-<meta name="description" content="A ROS 2 and drone development IDE. Write, run and inspect robot code in one place. Public beta for Windows and Linux by octaboomai." />
+<title>Rovant — ROS 2 IDE for Windows and Linux</title>
+<meta name="description" content="A ROS 2 and drone development IDE for Windows and Linux. Live URDF preview, Python and C/C++ syntax highlighting, colcon tasks, and ROS 2 Humble detection via WSL2. Free, Apache 2.0, public beta." />
 <meta name="theme-color" content="#070709" />
-<meta property="og:title" content="Rovant — ROS 2 that actually works on Windows" />
-<meta property="og:description" content="Zero-setup robotics tooling. Public beta for Windows and Linux." />
+<link rel="canonical" href="https://rovant.dev/" />
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="Rovant" />
+<meta property="og:title" content="Rovant — ROS 2 IDE for Windows and Linux" />
+<meta property="og:description" content="Live URDF preview, syntax highlighting and colcon tasks. No ROS environment to configure. Free and open source." />
+<meta property="og:url" content="https://rovant.dev/" />
+<meta property="og:image" content="https://rovant.dev/img/demo-poster.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Rovant — ROS 2 IDE for Windows and Linux" />
+<meta name="twitter:description" content="Live URDF preview, syntax highlighting and colcon tasks. No ROS environment to configure." />
+<meta name="twitter:image" content="https://rovant.dev/img/demo-poster.jpg" />
 <link rel="icon" type="image/png" href="icon.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://rovant.dev/#org",
+      "name": "octaboomai",
+      "url": "https://rovant.dev/",
+      "logo": "https://rovant.dev/icon.png",
+      "sameAs": ["https://github.com/octaboomai"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://rovant.dev/#website",
+      "url": "https://rovant.dev/",
+      "name": "Rovant",
+      "publisher": { "@id": "https://rovant.dev/#org" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://rovant.dev/#software",
+      "name": "Rovant",
+      "alternateName": "Rovant IDE",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Integrated Development Environment",
+      "operatingSystem": "Windows 10, Windows 11, Ubuntu 22.04, Linux",
+      "softwareVersion": "0.2.1",
+      "url": "https://rovant.dev/",
+      "downloadUrl": "https://github.com/octaboomai/Rovant/releases/latest",
+      "installUrl": "https://github.com/octaboomai/Rovant/releases/latest",
+      "softwareHelp": "https://rovant.dev/#walkthrough",
+      "description": "A ROS 2 and drone development IDE for Windows and Linux. Syntax highlighting for Python, C/C++ and CMake, run-current-file, a live URDF/Xacro 3D preview, ROS 2 Humble detection through WSL2, and live topics over rosbridge.",
+      "isAccessibleForFree": true,
+      "license": "https://www.apache.org/licenses/LICENSE-2.0",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Python, C/C++ and CMake syntax highlighting",
+        "Run current file in terminal (Python; C/C++ compiled and executed)",
+        "Live URDF / Xacro 3D preview",
+        "ROS 2 Humble detection via WSL2",
+        "Live ROS topics over rosbridge",
+        "Colcon build tasks and project templates",
+        "Windows installer, .deb and AppImage"
+      ],
+      "programmingLanguage": ["Python", "C", "C++", "CMake", "XML"],
+      "runtimePlatform": ["Windows", "Linux"],
+      "screenshot": "https://rovant.dev/img/demo-poster.jpg",
+      "publisher": { "@id": "https://rovant.dev/#org" },
+      "sameAs": ["https://github.com/octaboomai/Rovant"],
+      "about": [
+        { "@type": "Thing", "name": "ROS 2" },
+        { "@type": "Thing", "name": "Robotics" },
+        { "@type": "Thing", "name": "URDF" },
+        { "@type": "Thing", "name": "Windows Subsystem for Linux" }
+      ],
+      "keywords": "ROS 2 IDE, robotics IDE, URDF viewer, Windows ROS 2, colcon, rosbridge"
+    }
+  ]
+}
+</script>
 <link rel="apple-touch-icon" href="icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -561,6 +631,7 @@ footer{
       </div>
       <div class="flinks">
         <span>© <span id="yr">2026</span> octaboomai</span>
+        <a href="vs/vscode/">vs VS Code</a>
         <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
         <a href="https://github.com/octaboomai/Rovant/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
         <a href="#architecture">Docs</a>

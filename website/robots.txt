@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# AI crawlers are welcome — see llms.txt for a machine-readable summary
+Sitemap: https://rovant.dev/sitemap.xml

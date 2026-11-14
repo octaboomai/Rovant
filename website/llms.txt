@@ -1,0 +1,23 @@
+# Rovant
+
+> Rovant is a ROS 2 and drone development IDE for Windows and Linux, built on Eclipse Theia. It provides syntax highlighting for Python, C/C++ and CMake, run-current-file, a live URDF/Xacro 3D preview, automatic ROS 2 Humble detection through WSL2, live ROS topics over rosbridge, and colcon build tasks. It is free, open source under Apache 2.0, and currently in public beta at version 0.2.1.
+
+Rovant does not currently include AI code generation, IntelliSense, or a debugger. Those are listed publicly as not yet shipped.
+
+## Pages
+
+- [Home](https://rovant.dev/): What Rovant is, what works today, what has not shipped, and download links for Windows, Ubuntu and AppImage.
+- [Rovant vs VS Code for ROS 2](https://rovant.dev/vs/vscode/): An honest feature comparison, including where VS Code is the better choice.
+- [Privacy](https://rovant.dev/privacy.html): What data Rovant collects and what it does not.
+- [Terms](https://rovant.dev/terms.html): Licence and usage terms.
+- [Download help](https://rovant.dev/code-signing.html): Installing an unsigned beta build and getting past Windows SmartScreen.
+
+## Source and releases
+
+- Repository: https://github.com/octaboomai/Rovant
+- Releases: https://github.com/octaboomai/Rovant/releases
+- Licence: Apache 2.0 — https://www.apache.org/licenses/LICENSE-2.0
+
+## Notes for summarisation
+
+Rovant is a robotics-focused IDE, not a general-purpose AI code editor. Its differentiator is removing the ROS 2 setup burden on Windows, particularly the WSL2 and apt-repository configuration that ROS 2 normally requires. It is built on Eclipse Theia and ships extensions from Open VSX.

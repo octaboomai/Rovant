@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rovant vs VS Code for ROS 2 development</title>
+<meta name="description" content="An honest comparison: VS Code with the ROS extension is the better general editor, Rovant removes the ROS 2 setup work on Windows. Feature matrix, and when to choose each." />
+<meta name="theme-color" content="#070709" />
+<link rel="canonical" href="https://rovant.dev/vs/vscode/" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Rovant" />
+<meta property="og:title" content="Rovant vs VS Code for ROS 2 development" />
+<meta property="og:description" content="VS Code is the better general editor. Rovant removes the ROS 2 setup work on Windows. An honest feature-by-feature comparison." />
+<meta property="og:url" content="https://rovant.dev/vs/vscode/" />
+<meta property="og:image" content="https://rovant.dev/img/demo-poster.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/png" href="../../icon.png" />
+<link rel="apple-touch-icon" href="../../icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Rovant", "item": "https://rovant.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Rovant vs VS Code", "item": "https://rovant.dev/vs/vscode/" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "Rovant compared with Visual Studio Code for ROS 2 development",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1,
+          "item": { "@type": "SoftwareApplication", "name": "Rovant", "url": "https://rovant.dev/",
+                    "applicationCategory": "DeveloperApplication" } },
+        { "@type": "ListItem", "position": 2,
+          "item": { "@type": "SoftwareApplication", "name": "Visual Studio Code", "url": "https://code.visualstudio.com/",
+                    "applicationCategory": "DeveloperApplication" } }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#070709;--surface:#0F0F13;--surface-subtle:#0A0A0E;--surface-card:#15151B;--surface-elevated:#1C1C24;
+  --border:rgba(255,255,255,.09);--border-subtle:rgba(255,255,255,.04);--border-hover:rgba(255,255,255,.35);
+  --strong:#FFFFFF;--text-bright:#EDEDF2;--text:#9E9EA8;--muted:#6B6B78;
+  --accent:#F1F5F9;--accent-glow:rgba(255,255,255,.12);--accent-text:#070709;
+  --success:#10C980;--warn:#F97316;--warn-bg:rgba(249,115,22,.08);--warn-border:rgba(249,115,22,.25);
+  --maxw:860px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Space Grotesk","Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text-bright);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 50% -20%,rgba(255,255,255,.08),transparent 70%)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
+:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
+
+header{position:sticky;top:0;z-index:50;height:64px;background:rgba(7,7,9,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border-subtle)}
+.nav{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:16px}
+.brand img{border-radius:6px;display:block}
+.navlinks{display:flex;gap:22px;margin-left:auto;font-size:14px;color:var(--text)}
+.navlinks a:hover{color:var(--strong)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:7px;font-size:14px;font-weight:500;padding:9px 16px;cursor:pointer;border:1px solid var(--border);background:var(--surface-card);color:var(--text-bright);transition:background .15s,border-color .15s;font-family:var(--sans)}
+.btn:hover{background:var(--surface-elevated);border-color:var(--border-hover)}
+.btn-primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600}
+.btn-primary:hover{background:#fff;border-color:#fff;box-shadow:0 0 0 4px var(--accent-glow)}
+.btn-lg{padding:13px 22px;font-size:15px;border-radius:8px}
+
+.crumbs{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin:36px 0 0;text-transform:uppercase}
+.crumbs a:hover{color:var(--text-bright)}
+h1{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.08;font-size:clamp(30px,5vw,46px);margin:14px 0 0;background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.6) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-family:var(--display);font-weight:700;letter-spacing:-.022em;font-size:clamp(20px,3vw,26px);margin:44px 0 0;color:var(--strong)}
+h3{font-family:var(--display);font-weight:600;font-size:16px;margin:0 0 12px;letter-spacing:-.01em;color:var(--strong)}
+p{color:var(--text);margin:14px 0 0;font-size:15.5px}
+p.lead{color:var(--text-bright);font-size:17px;line-height:1.62;margin-top:20px}
+strong{color:var(--text-bright);font-weight:600}
+
+.verdict{margin:30px 0 0;padding:20px 22px;border-radius:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--success)}
+.verdict .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--success);display:block;margin-bottom:8px}
+.verdict p{margin:0;color:var(--text-bright);font-size:15.5px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px}
+.panel{border-top:2px solid var(--border-hover)}
+.panel ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.panel li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--text);line-height:1.55}
+.tick{flex:none;margin-top:2px;font-family:var(--mono);font-size:12px;line-height:1}
+.panel .tick{color:var(--success)}
+
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border)}
+td:first-child{color:var(--text-bright);font-weight:500}
+td{color:var(--text)}
+.y{color:var(--success);font-family:var(--mono);font-size:13px}
+.n{color:var(--warn);font-family:var(--mono);font-size:13px}
+.part{color:var(--muted);font-family:var(--mono);font-size:12px}
+
+.cta{margin:44px 0 0;padding:26px;border-radius:11px;background:var(--surface);border:1px solid var(--border);text-align:center}
+.cta p{margin:0 0 18px;color:var(--text-bright);font-size:16px}
+.platform{font-size:13px;color:var(--muted);margin-top:14px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap;align-items:center}
+.platform a{color:var(--text);border-bottom:1px solid var(--border)}
+.platform a:hover{color:var(--strong);border-bottom-color:var(--border-hover)}
+
+.related{margin:40px 0 0;padding-top:22px;border-top:1px solid var(--border-subtle)}
+.related p{margin:0 0 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.related ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.related li a{color:var(--text-bright);border-bottom:1px solid var(--border-hover);font-size:14.5px}
+.related li span{color:var(--muted);font-size:14px}
+
+footer{margin-top:64px;border-top:1px solid var(--border-subtle);padding:30px 0 56px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--muted)}
+.flinks{display:flex;gap:18px;flex-wrap:wrap}
+.flinks a:hover{color:var(--text-bright)}
+
+@media(max-width:700px){.cols{grid-template-columns:1fr}.navlinks{display:none}table{font-size:13.5px}th,td{padding:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="../../index.html" aria-label="Rovant home">
+      <img src="../../icon.png" alt="" width="24" height="24" />Rovant
+    </a>
+    <div class="navlinks">
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#install">Download</a>
+      <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <a class="btn btn-primary" href="../../index.html#install">Download</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <p class="crumbs"><a href="../../index.html">Rovant</a> / Comparisons / VS Code</p>
+  <h1>Rovant vs VS Code for ROS 2</h1>
+
+  <p class="lead">VS Code with the ROS extension is the most common ROS 2 setup, and it is genuinely excellent — full IntelliSense, a vast extension market, and it runs everywhere. Rovant solves a narrower problem: getting from a clean Windows install to a running ROS 2 topic list without configuring WSL2, apt repositories and rosbridge by hand. Here is where each one actually wins.</p>
+
+  <div class="verdict">
+    <span class="k">Short answer</span>
+    <p>If you already have a working ROS 2 environment and want the best general editor, use VS Code — it is more capable than Rovant and will stay that way. If you are on Windows, have never installed ROS 2, and want a robot model on screen today, Rovant gets you there in one installer.</p>
+  </div>
+
+  <h2>Where each one wins</h2>
+  <div class="cols">
+    <div class="panel">
+      <h3>VS Code</h3>
+      <ul>
+        <li><span class="tick">✓</span>IntelliSense, go-to-definition and refactoring for Python, C++ and CMake</li>
+        <li><span class="tick">✓</span>A working debugger — breakpoints, watch, call stacks</li>
+        <li><span class="tick">✓</span>Tens of thousands of extensions versus a handful</li>
+        <li><span class="tick">✓</span>Remote-SSH, Dev Containers, remote WSL development</li>
+        <li><span class="tick">✓</span>Runs natively on Windows, macOS and Linux</li>
+        <li><span class="tick">✓</span>Years of documentation, tutorials and Stack Overflow answers</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Rovant</h3>
+      <ul>
+        <li><span class="tick">✓</span>Detects ROS 2 Humble inside WSL2 automatically and says what is missing</li>
+        <li><span class="tick">✓</span>Live URDF / Xacro 3D preview with no ROS environment running</li>
+        <li><span class="tick">✓</span>Starts rosbridge and streams live topics with no manual setup</li>
+        <li><span class="tick">✓</span>Colcon build tasks and ROS 2 project templates built in</li>
+        <li><span class="tick">✓</span>One installer, no extension hunting or configuration files</li>
+        <li><span class="tick">✓</span>Apache 2.0, no account, no telemetry you cannot switch off</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Feature matrix</h2>
+  <table>
+    <thead>
+      <tr><th>Capability</th><th>Rovant</th><th>VS Code</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Python / C++ / CMake syntax highlighting</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>IntelliSense &amp; go-to-definition</td><td class="n">✗</td><td class="y">✓</td></tr>
+      <tr><td>Debugger (breakpoints, watch)</td><td class="n">✗</td><td class="y">✓</td></tr>
+      <tr><td>Run current file in terminal</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>C/C++ compile-and-run in one step</td><td class="y">✓</td><td class="part">via tasks</td></tr>
+      <tr><td>Live URDF / Xacro 3D preview</td><td class="y">✓ built in</td><td class="part">via extension</td></tr>
+      <tr><td>ROS 2 environment detection</td><td class="y">✓ automatic</td><td class="part">manual</td></tr>
+      <tr><td>Live ROS topics over rosbridge</td><td class="y">✓ built in</td><td class="part">via extension</td></tr>
+      <tr><td>Colcon build tasks</td><td class="y">✓ built in</td><td class="part">via tasks</td></tr>
+      <tr><td>Works on macOS</td><td class="n">✗</td><td class="y">✓</td></tr>
+      <tr><td>Extension ecosystem</td><td class="n">small</td><td class="y">very large</td></tr>
+      <tr><td>Setup to first ROS 2 topic</td><td class="y">one installer</td><td class="part">install + configure</td></tr>
+    </tbody>
+  </table>
+
+  <h2>When to choose VS Code</h2>
+  <p>You want the best editor available and are willing to spend an evening on setup. You need a debugger. You work on macOS. You depend on a specific extension that Rovant does not have. You are already productive in ROS 2 and do not need help getting started.</p>
+
+  <h2>When to choose Rovant</h2>
+  <p>You are on Windows and the ROS 2 installation guide has defeated you. You want to look at a URDF or Xacro file as a 3D model without launching Gazebo or RViz. You are teaching, demoing or learning, and the environment is the obstacle rather than the point. You want colcon builds and topic inspection in the same window as your code.</p>
+
+  <div class="cta">
+    <p>Rovant is a free, Apache 2.0 public beta for Windows and Linux.</p>
+    <a class="btn btn-primary btn-lg" href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe" target="_blank" rel="noopener">Download for Windows</a>
+    <div class="platform">
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe" target="_blank" rel="noopener">Windows .exe</a>
+      <span>·</span>
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb" target="_blank" rel="noopener">Ubuntu .deb</a>
+      <span>·</span>
+      <a href="https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage" target="_blank" rel="noopener">AppImage</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <p>Also worth reading</p>
+    <ul>
+      <li><a href="../../index.html#roadmap">What Rovant does today, and what has not shipped yet</a></li>
+      <li><a href="../../index.html#install">Installing Rovant on Windows</a></li>
+      <li><a href="../../index.html#walkthrough">What you will see when you install it</a></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="wrap">
+  <div>© 2026 Rovant · Apache 2.0</div>
+  <div class="flinks">
+    <a href="../../index.html">Home</a>
+    <a href="../../privacy.html">Privacy</a>
+    <a href="../../terms.html">Terms</a>
+    <a href="https://github.com/octaboomai/Rovant" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
