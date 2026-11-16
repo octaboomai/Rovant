@@ -1,0 +1,21 @@
+{
+  "$comment": "Machine-readable update manifest. Bump latestVersion, versionCode and the download URLs with every release. The desktop app prefers electron-updater (latest.yml on GitHub Releases); this file is the stable, cacheable endpoint for anything that cannot use it, and for future mobile builds.",
+  "latestVersion": "0.2.0",
+  "versionCode": 200,
+  "publishedAt": "2026-11-06T11:32:26Z",
+  "mandatory": false,
+  "minimumSupported": "0.1.0",
+  "releaseNotes": [
+    "Live URDF / Xacro 3D preview beside the editor",
+    "ROS 2 Humble detected automatically inside WSL2",
+    "Live topics over rosbridge, no manual setup",
+    "Run current file: Python, and C/C++ compiled and executed",
+    "Colcon build tasks and ROS 2 project templates"
+  ],
+  "downloadUrls": {
+    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe",
+    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage",
+    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb",
+    "android": null
+  }
+}

@@ -17,6 +17,7 @@ import { ToolchainInstallerWidget } from './toolchain/toolchain-installer';
 import { TemplatesContribution } from './templates/templates-contribution';
 import { RosDebugConfigContribution } from './ros-debug-config';
 import { O1BrandingContribution } from './rovant-branding';
+import { RovantUpdaterContribution } from './rovant-updater';
 
 export default new ContainerModule(bind => {
     // Commands & menus — also FrontendApplicationContribution for onStart() auto-preview
@@ -30,6 +31,10 @@ export default new ContainerModule(bind => {
     // Rovant branding
     bind(O1BrandingContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(O1BrandingContribution);
+
+    // In-app self-update pill (no-ops outside Electron)
+    bind(RovantUpdaterContribution).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(RovantUpdaterContribution);
 
     // Debug config (launch.json writer)
     bind(RosDebugConfigContribution).toSelf().inSingletonScope();

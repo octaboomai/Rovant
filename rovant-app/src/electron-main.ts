@@ -359,38 +359,154 @@ function setupIPC(): void {
     ipcMain.handle('Rovant:get-platform', () => ({ os: process.platform, arch: process.arch, version: APP_VERSION, home: os.homedir() }));
 }
 
-// ── FIX #2: Auto-updater via electron-updater (works on all platforms) ────────
+// ── Auto-updater (electron-updater over GitHub Releases) ──────────────────────
+/**
+ * Update state lives in the main process and is pushed to every renderer.
+ *
+ * The renderer never talks to electron-updater directly — it only reads this
+ * state object and calls three IPC methods. That keeps the download/verify/
+ * install lifecycle in one place and means the UI can be rebuilt or reloaded
+ * without losing track of an in-flight download.
+ */
+export interface RovantUpdateState {
+    status: 'idle' | 'checking' | 'available' | 'downloading' | 'downloaded' | 'up-to-date' | 'error' | 'unsupported';
+    currentVersion: string;
+    latestVersion?: string;
+    releaseNotes?: string[];
+    percent?: number;
+    error?: string;
+}
+
+let updateState: RovantUpdateState = { status: 'idle', currentVersion: APP_VERSION };
+
+function broadcastUpdateState(): void {
+    for (const win of BrowserWindow.getAllWindows()) {
+        if (!win.isDestroyed()) win.webContents.send('rovant:update:status', updateState);
+    }
+}
+
+function setUpdateState(patch: Partial<RovantUpdateState>): void {
+    updateState = { ...updateState, ...patch };
+    broadcastUpdateState();
+}
+
+/** electron-updater gives release notes as a string, or an array of per-version blocks. */
+function normaliseReleaseNotes(info: { releaseNotes?: any; version?: string }): string[] {
+    const notes = info?.releaseNotes;
+    if (Array.isArray(notes)) {
+        return notes
+            .map((n: any) => String(n?.note ?? ''))
+            .join('\n')
+            .split('\n')
+            .map(l => l.replace(/^[-*]\s*/, '').trim())
+            .filter(Boolean)
+            .slice(0, 12);
+    }
+    if (typeof notes === 'string' && notes.trim()) {
+        return notes
+            .split('\n')
+            .map(l => l.replace(/^[-*]\s*/, '').trim())
+            .filter(Boolean)
+            .slice(0, 12);
+    }
+    return [];
+}
+
 function setupAutoUpdater(): void {
-    if (isDev) return;
+    // Linux AppImage and Windows NSIS both support electron-updater. A .deb install
+    // is managed by apt, so in-place self-update is not possible there — say so
+    // plainly rather than showing a button that cannot work.
+    const isAppImage  = !!process.env['APPIMAGE'];
+    const isSnap      = !!process.env['SNAP'];
+    const isDebInstall = process.platform === 'linux' && !isAppImage && !isSnap;
+
+    if (isDev) {
+        setUpdateState({ status: 'unsupported', error: 'Updates are disabled in development builds.' });
+    }
+
     try {
-        // FIX #3: org replaced with octaboomai
         autoUpdater.setFeedURL({
             provider: 'github',
             owner:    'octaboomai',
             repo:     'Rovant',
         } as any);
 
-        // An unhandled 'error' on an EventEmitter throws and kills the main process.
-        // Offline / rate-limited / no release asset must degrade quietly.
-        autoUpdater.on('error', (err: any) => {
-            console.warn('[Rovant updater]', err?.message || err);
-        });
-
+        // Download automatically; the renderer shows progress and installs on click.
+        autoUpdater.autoDownload = true;
+        autoUpdater.autoInstallOnAppQuit = true;
         autoUpdater.logger = null;
-        autoUpdater.checkForUpdates().catch(() => {});
-        setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 4 * 60 * 60 * 1000);
 
-        autoUpdater.on('update-downloaded', (_info) => {
-            const choice = dialog.showMessageBoxSync(mainWindow!, {
-                type: 'info', title: 'Update ready',
-                message: `A new version of Rovant is ready.`,
-                detail:  'Restart to apply the update.',
-                buttons: ['Restart now', 'Later'],
-            });
-            if (choice === 0) { isQuitting = true; autoUpdater.quitAndInstall(); }
+        autoUpdater.on('checking-for-update', () => setUpdateState({ status: 'checking', error: undefined }));
+        autoUpdater.on('update-available', (info: any) => setUpdateState({
+            status: 'available',
+            latestVersion: info?.version,
+            releaseNotes: normaliseReleaseNotes(info),
+            percent: 0,
+            error: undefined,
+        }));
+        autoUpdater.on('update-not-available', () => setUpdateState({ status: 'up-to-date', percent: 0 }));
+        autoUpdater.on('download-progress', (p: any) => setUpdateState({
+            status: 'downloading',
+            percent: Math.max(0, Math.min(100, Math.round(p?.percent ?? 0))),
+        }));
+        autoUpdater.on('update-downloaded', (info: any) => setUpdateState({
+            status: 'downloaded',
+            latestVersion: info?.version ?? updateState.latestVersion,
+            releaseNotes: normaliseReleaseNotes(info).length ? normaliseReleaseNotes(info) : updateState.releaseNotes,
+            percent: 100,
+        }));
+
+        // An unhandled 'error' on an EventEmitter throws and kills the main process.
+        // Offline / rate-limited / missing asset must degrade quietly.
+        autoUpdater.on('error', (err: any) => {
+            const message = String(err?.message ?? err);
+            console.warn('[Rovant updater]', message);
+            setUpdateState({ status: 'error', error: message });
         });
+
+        // ── IPC surface used by the in-app "Update" pill ──────────────────────
+        ipcMain.handle('rovant:update:get-state', () => updateState);
+
+        ipcMain.handle('rovant:update:check', async () => {
+            if (isDev) return updateState;
+            try { await autoUpdater.checkForUpdates(); }
+            catch (err) { setUpdateState({ status: 'error', error: String((err as Error)?.message ?? err) }); }
+            return updateState;
+        });
+
+        ipcMain.handle('rovant:update:install', () => {
+            if (updateState.status !== 'downloaded') return false;
+            isQuitting = true;
+            // (isSilent = false, isForceRunAfter = true) — install, then relaunch.
+            setImmediate(() => autoUpdater.quitAndInstall(false, true));
+            return true;
+        });
+
+        ipcMain.handle('rovant:update:dismiss', () => {
+            // Hide the pill without forgetting a downloaded update.
+            if (updateState.status === 'available' || updateState.status === 'error') {
+                setUpdateState({ status: 'idle' });
+            }
+            return updateState;
+        });
+
+        if (!isDev) {
+            if (isDebInstall) {
+                setUpdateState({
+                    status: 'unsupported',
+                    error: 'This .deb install is updated through apt, not in-app.',
+                });
+            } else {
+                autoUpdater.checkForUpdates().catch(() => { /* handled by the error listener */ });
+                setInterval(
+                    () => autoUpdater.checkForUpdates().catch(() => { /* handled by the error listener */ }),
+                    4 * 60 * 60 * 1000,
+                );
+            }
+        }
     } catch (err) {
         console.warn('[Rovant] Auto-updater unavailable:', (err as Error).message);
+        setUpdateState({ status: 'unsupported', error: (err as Error).message });
     }
 }
 
