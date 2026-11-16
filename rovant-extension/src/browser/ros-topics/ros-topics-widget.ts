@@ -93,14 +93,14 @@ pre{white-space:pre-wrap;word-break:break-all}
 <body>
 <div class="toolbar">
   <span style="font-weight:700;color:#0fdfff;font-size:13px">rosbridge</span>
-  <input id="url" value="' + this.rosbridgeUrl + '"/>
+  <input id="url" value="${this.rosbridgeUrl}" placeholder="ws://localhost:9090" spellcheck="false" autocomplete="off"/>
   <button class="btn" id="bc">Connect</button>
   <button class="btn d" id="bd" style="display:none">Disconnect</button>
 </div>
 <div class="sb"><div class="dot" id="dot"></div><span id="st">Not connected</span><span style="color:#7a94a4;margin-left:auto" id="tc"></span></div>
 <div class="body">
   <div class="list"><div class="lh" id="lh">Topics (0)</div><div id="li"></div></div>
-  <div class="dp" id="dp"><div class="es"><div style="font-size:32px;opacity:.3">📡</div><div>Connect to rosbridge to see live topics</div><div style="font-size:11px">Default: auto-detected from page host</div></div></div>
+  <div class="dp" id="dp"><div class="es"><div style="font-size:32px;opacity:.3">📡</div><div>Connect to rosbridge to see live topics</div><div style="font-size:11px">Default: ws://localhost:9090 &mdash; clear the field to use it</div></div></div>
 </div>
 <script>
 var ros=null,topics={},active=null,sub=null,cnt={},lt={};
