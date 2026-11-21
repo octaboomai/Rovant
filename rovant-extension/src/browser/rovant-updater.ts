@@ -1,5 +1,7 @@
-import { injectable } from '@theia/core/shared/inversify';
+import { inject, injectable } from '@theia/core/shared/inversify';
 import { FrontendApplicationContribution } from '@theia/core/lib/browser/frontend-application-contribution';
+import { StatusBar, StatusBarAlignment } from '@theia/core/lib/browser/status-bar/status-bar';
+import { CommandRegistry } from '@theia/core/lib/common/command';
 
 /**
  * In-app self-update pill.
@@ -107,6 +109,9 @@ const CSS = `
 @injectable()
 export class RovantUpdaterContribution implements FrontendApplicationContribution {
 
+    @inject(StatusBar)       protected readonly statusBar: StatusBar;
+    @inject(CommandRegistry) protected readonly commands: CommandRegistry;
+
     private bridge?: RovantBridge;
     private pill?: HTMLButtonElement;
     private scrim?: HTMLDivElement;
@@ -121,6 +126,20 @@ export class RovantUpdaterContribution implements FrontendApplicationContributio
 
         this.injectCSS();
         this.mountPill();
+
+        // The pill only appears when there is something to act on. The status bar
+        // entry is always present, so there is a visible way to check for updates
+        // even when nothing has been found yet — and it works even if the title
+        // bar DOM this build ships differs from the one the pill targets.
+        this.commands.registerCommand(
+            { id: 'rovant.checkForUpdates', label: 'Rovant: Check for Updates' },
+            { execute: () => { void this.bridge?.updateCheck(); } },
+        );
+        this.commands.registerCommand(
+            { id: 'rovant.installUpdate', label: 'Rovant: Install Downloaded Update' },
+            { execute: () => { void this.install(); } },
+        );
+        this.renderStatus({ status: 'checking', currentVersion: '' });
 
         // Replay the current state in case the main process broadcast before we
         // were listening, then subscribe to future changes.
@@ -180,8 +199,60 @@ export class RovantUpdaterContribution implements FrontendApplicationContributio
         place();
     }
 
+    private renderStatus(state: RovantUpdateState): void {
+        let text = 'Updates';
+        let tooltip = 'Check for updates';
+        let command = 'rovant.checkForUpdates';
+
+        switch (state.status) {
+            case 'available':
+                text = `Update to v${state.latestVersion ?? ''}`;
+                tooltip = 'A new version of Rovant is available';
+                break;
+            case 'downloading':
+                text = `Updating… ${state.percent ?? 0}%`;
+                tooltip = 'Downloading the update';
+                command = '';
+                break;
+            case 'downloaded':
+                text = 'Restart to update';
+                tooltip = 'The update is downloaded and ready to install';
+                command = 'rovant.installUpdate';
+                break;
+            case 'checking':
+                text = 'Checking for updates…';
+                tooltip = 'Contacting GitHub Releases';
+                command = '';
+                break;
+            case 'up-to-date':
+                text = 'Up to date';
+                tooltip = `Rovant ${state.currentVersion} is the latest version`;
+                break;
+            case 'error':
+                text = 'Update check failed';
+                tooltip = state.error ?? 'Could not reach the update server';
+                break;
+            case 'unsupported':
+                text = 'Updates unavailable';
+                tooltip = state.error ?? 'This install is updated another way';
+                command = '';
+                break;
+            default:
+                break;
+        }
+
+        this.statusBar.setElement('rovant-update', {
+            text,
+            tooltip,
+            ...(command ? { command } : {}),
+            alignment: StatusBarAlignment.RIGHT,
+            priority: 100,
+        });
+    }
+
     private apply(state: RovantUpdateState): void {
         this.state = state;
+        this.renderStatus(state);
         const pill = this.pill;
         if (!pill) return;
 

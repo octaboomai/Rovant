@@ -67,13 +67,6 @@ const ROS_ENV_MIN = IS_WIN_UI
 
 const ROS_LAUNCH_JSON = {
     version: '0.2.0',
-    inputs: [
-        {
-            id:          'rosNodeProcess',
-            type:        'pickProcess',
-            description: 'Select the ROS node process to attach to',
-        }
-    ],
     configurations: [
         {
             // NOTE: F5 / Run uses the FIRST configuration. Keep a *launch* config
@@ -97,20 +90,6 @@ const ROS_LAUNCH_JSON = {
             justMyCode:  false,
             pathMappings: [{ localRoot: '${workspaceFolder}', remoteRoot: '${workspaceFolder}' }],
             // Launch node with: python -m debugpy --listen 5678 --wait-for-client your_node.py
-        },
-        {
-            name:        'ROS 2: Attach to C++ node (GDB)',
-            type:        'cppdbg',
-            request:     'attach',
-            program:     '${workspaceFolder}/build/${workspaceFolderBasename}/${workspaceFolderBasename}',
-            processId:   '${input:rosNodeProcess}',
-            MIMode:      'gdb',
-            miDebuggerPath: '/usr/bin/gdb',
-            environment: Object.entries(ROS_ENV_MIN).map(([name, value]) => ({ name, value })),
-            setupCommands: [
-                { text: '-enable-pretty-printing',              ignoreFailures: true },
-                { text: '-gdb-set disassembly-flavor intel',    ignoreFailures: true },
-            ],
         },
         {
             name:    'ROS 2: Launch + debug Python node',

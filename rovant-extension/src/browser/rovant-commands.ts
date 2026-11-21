@@ -130,56 +130,74 @@ export class O1CommandContribution
             ? `${tool} was not found. Windows needs WSL 2 with g++ installed. Linux: sudo apt install build-essential.`
             : `${tool} was not found on PATH. Install Python 3 from python.org and restart Rovant.`;
 
+        // A task is created as type 'process', not 'shell'.
+        //
+        // The previous version built one long string — `wsl.exe bash -lc "..."`
+        // containing `||`, `&&`, `>` and nested quotes — and handed it to a shell
+        // task. Whatever shell Theia picked (cmd.exe, PowerShell) re-parsed it
+        // before WSL ever saw it, so the inner script arrived mangled and bash
+        // exited 127 ("command not found"). A process task passes argv straight
+        // to the binary: no shell, nothing to mangle.
         let command: string;
+        let args: string[];
+
         if (cLike) {
             const compiler = cxxLike ? 'g++' : 'gcc';
             const out = `${file}.out`;
+
+            // Windows paths have to become WSL paths before bash can see them:
+            //   C:\dir\file.cpp  ->  /mnt/c/dir/file.cpp
+            const wslPath = (p: string): string => {
+                const m = /^([A-Za-z]):[\\/](.*)$/.exec(p);
+                const posix = m ? `/mnt/${m[1].toLowerCase()}/${m[2].replace(/\\/g, '/')}`
+                                : p.replace(/\\/g, '/');
+                // The path lands inside a double-quoted shell word.
+                return posix.replace(/(["\\$`])/g, '\\$1');
+            };
+
+            const target    = isWin ? wslPath(file) : file;
+            const targetOut = isWin ? wslPath(out)  : out;
+
+            // The availability check runs inside the same shell that will invoke
+            // the compiler, so the answer is about the environment that actually
+            // does the work — not the Windows PATH.
+            const script =
+                `command -v ${compiler} >/dev/null 2>&1 || { echo "${notFound(compiler)}"; exit 1; }; `
+                + `${compiler} -g -O0 "${target}" -o "${targetOut}" && "${targetOut}"`;
+
             if (isWin) {
-                // ROS toolchain lives in WSL, so compile there with a WSL path.
-                // C:\dir\file -> /mnt/c/dir/file ; a POSIX path is left as-is.
-                const wsl = (p: string): string => {
-                    const m = /^([A-Za-z]):[\\/](.*)$/.exec(p);
-                    const posix = m ? `/mnt/${m[1].toLowerCase()}/${m[2].replace(/\\/g, '/')}`
-                                    : p.replace(/\\/g, '/');
-                    // Escape single quotes for the bash single-quote context it lands in.
-                    return posix.replace(/'/g, "'\\''");
-                };
-                // The compiler lives inside WSL, so check it there — not on the Windows PATH.
-                const inner = `command -v ${compiler} >/dev/null 2>&1 || { echo '${notFound(compiler)}'; exit 1; }; `
-                    + `${compiler} -g -O0 '${wsl(file)}' -o '${wsl(out)}' && '${wsl(out)}'`;
-                command = `wsl.exe bash -lc "${inner}"`;
+                command = 'wsl.exe';
+                args    = ['bash', '-lc', script];
             } else {
-                command = `command -v ${compiler} >/dev/null 2>&1 || { echo "${notFound(compiler)}"; exit 1; }; `
-                    + `${compiler} -g -O0 "${file}" -o "${out}" && "${out}"`;
+                command = 'bash';
+                args    = ['-lc', script];
             }
         } else if (ext === '.py') {
             const py = isWin ? 'python' : 'python3';
-            // Windows task shells are cmd.exe (node's default), where '||' is valid.
-            command = isWin
-                ? `where ${py} >nul 2>&1 || (echo ${notFound(py)} & exit /b 1) && ${py} "${file}"`
-                : `command -v ${py} >/dev/null 2>&1 || { echo "${notFound(py)}"; exit 1; }; ${py} "${file}"`;
+            command = py;
+            args    = [file];
         } else {
-            command = `"${file}"`;
+            command = file;
+            args    = [];
         }
-        // Tell the user exactly what will run, and what to check if nothing appears.
-        // (Deliberately NOT a shell-level existence check: `||` breaks on PowerShell 5.1,
-        //  so a wrong guess would replace a clear message with a syntax error.)
-        const interpreter = cLike
-            ? (cxxLike ? 'g++' : 'gcc')
-            : (ext === '.py' ? (isWin ? 'python' : 'python3') : null);
-        if (interpreter) {
-            const hint = cLike && isWin
-                ? 'C/C++ compiles inside WSL — WSL 2 with g++ must be installed.'
-                : `If no output appears, ${interpreter} may not be on your PATH.`;
-            this.messageService.info(`Running ${uri.path.base} with ${interpreter}. ${hint}`);
+
+        // One notification, and only when it adds something. For C/C++ the
+        // terminal already shows the exact compile-and-run line, so announcing
+        // it as well was just noise on top of a failure.
+        if (!cLike) {
+            const interpreter = ext === '.py' ? (isWin ? 'python' : 'python3') : null;
+            if (interpreter) {
+                this.messageService.info(`Running ${uri.path.base} with ${interpreter}. If no output appears, it may not be on your PATH.`);
+            }
         }
 
         try {
             await this.taskService.runTask({
-                type: 'shell',
+                type: 'process',
                 _scope: TaskScope.Workspace,
                 label: `Rovant: run ${uri.path.base}`,
                 command,
+                args,
                 options: { cwd: uri.path.dir.fsPath() },
                 // Keep the terminal open after exit. Without this a fast script
                 // (print + exit in ~80ms) flashes past and the output is lost.
