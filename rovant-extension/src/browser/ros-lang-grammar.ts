@@ -1,6 +1,7 @@
 import { injectable } from '@theia/core/shared/inversify';
 import { LanguageGrammarDefinitionContribution } from '@theia/monaco/lib/browser/textmate/textmate-contribution';
 import { TextmateRegistry } from '@theia/monaco/lib/browser/textmate/textmate-registry';
+import * as monaco from '@theia/monaco-editor-core';
 
 /**
  * FEATURE 4: .msg / .srv / .action highlighting + IntelliSense

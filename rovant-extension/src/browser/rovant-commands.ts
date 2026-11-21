@@ -38,13 +38,42 @@ export class O1CommandContribution
     @inject(TaskService)            protected readonly taskService:   TaskService;
     @inject(CommandRegistry)        protected readonly commandRegistry: CommandRegistry;
 
-    /** FIX: auto-open URDF viewer when a .urdf or .xacro file is opened */
-    onStart(): void {
-        // #6 — open a terminal on launch so users can see they have a shell.
+    private static readonly TERMINAL_ONCE_KEY = 'rovant:terminal-opened';
+
+    private openTerminalOnce(): void {
+        let alreadyOpened = false;
+        try {
+            alreadyOpened = !!window.localStorage.getItem(O1CommandContribution.TERMINAL_ONCE_KEY);
+        } catch {
+            // Storage can be unavailable (private mode, locked profile) — then we
+            // simply skip the auto-open rather than risk re-adding it every launch.
+            return;
+        }
+        if (alreadyOpened) return;
+
         // Deferred so it does not compete with the shell finishing its layout.
         setTimeout(() => {
-            this.commandRegistry.executeCommand('terminal:new').catch(() => { /* terminal optional */ });
+            this.commandRegistry.executeCommand('terminal:new')
+                .then(() => {
+                    try { window.localStorage.setItem(O1CommandContribution.TERMINAL_ONCE_KEY, '1'); }
+                    catch { /* best effort */ }
+                })
+                .catch(() => { /* terminal optional */ });
         }, 1500);
+    }
+
+    /** FIX: auto-open URDF viewer when a .urdf or .xacro file is opened */
+    onStart(): void {
+        // Open a terminal once, on first run only.
+        //
+        // This used to run on every launch. Because Theia persists the workbench
+        // layout, each launch added another terminal widget to it; by the third
+        // start the saved layout referenced terminals whose backend processes no
+        // longer existed, producing on every boot:
+        //   terminal:TerminalWidgetImpl WARN Failed attaching to terminal id …
+        //   Uncaught (in promise) Error: Failed to start terminal for id: -1.
+        // Opening it once means the layout never accumulates dead entries.
+        this.openTerminalOnce();
 
         this.editorManager.onCreated(editorWidget => {
             const uri = editorWidget.getResourceUri();

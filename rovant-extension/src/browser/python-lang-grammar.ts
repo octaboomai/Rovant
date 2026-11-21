@@ -1,6 +1,7 @@
 import { injectable } from '@theia/core/shared/inversify';
 import { LanguageGrammarDefinitionContribution } from '@theia/monaco/lib/browser/textmate/textmate-contribution';
 import { TextmateRegistry } from '@theia/monaco/lib/browser/textmate/textmate-registry';
+import * as monaco from '@theia/monaco-editor-core';
 
 /**
  * FEATURE: Python language support (.py / .pyw / .pyi)
@@ -149,7 +150,7 @@ const PYTHON_CONFIGURATION: monaco.languages.LanguageConfiguration = {
     onEnterRules: [
         {
             beforeText: /^\s*(class|def|if|elif|else|for|while|try|except|finally|with|match|case)\b.*:\s*(#.*)?$/,
-            action: { indentAction: 1 as monaco.languages.IndentAction },
+            action: { indentAction: monaco.languages.IndentAction.Indent },
         },
     ],
 };

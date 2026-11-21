@@ -1,3 +1,5 @@
+import * as monaco from '@theia/monaco-editor-core';
+
 /**
  * Safe access to the Monaco editor API.
  *
@@ -22,11 +24,14 @@ export interface MonacoEditorApi {
 }
 
 function editorApi(): MonacoEditorApi | undefined {
-    const m = typeof monaco !== 'undefined' ? (monaco as any) : undefined;
-    if (!m || !m.editor) return undefined;
-    if (typeof m.editor.getModels !== 'function') return undefined;
-    if (typeof m.editor.setModelLanguage !== 'function') return undefined;
-    return m.editor as MonacoEditorApi;
+    // `monaco` is imported, not read off the global scope. The global is never
+    // defined in this build — that is what produced
+    // "MonacoTextmateService ERROR ReferenceError: monaco is not defined".
+    const editor = (monaco as any)?.editor;
+    if (!editor) return undefined;
+    if (typeof editor.getModels !== 'function') return undefined;
+    if (typeof editor.setModelLanguage !== 'function') return undefined;
+    return editor as MonacoEditorApi;
 }
 
 /** True when the model API is usable right now. */
