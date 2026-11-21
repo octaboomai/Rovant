@@ -1,21 +1,21 @@
 {
   "$comment": "Machine-readable update manifest. Bump latestVersion, versionCode and the download URLs with every release. The desktop app prefers electron-updater (latest.yml on GitHub Releases); this file is the stable, cacheable endpoint for anything that cannot use it, and for future mobile builds.",
-  "latestVersion": "0.2.0",
-  "versionCode": 200,
-  "publishedAt": "2026-11-06T11:32:26Z",
+  "latestVersion": "0.2.1",
+  "versionCode": 210,
+  "publishedAt": "2026-11-21T13:22:08Z",
   "mandatory": false,
   "minimumSupported": "0.1.0",
   "releaseNotes": [
-    "Live URDF / Xacro 3D preview beside the editor",
-    "ROS 2 Humble detected automatically inside WSL2",
-    "Live topics over rosbridge, no manual setup",
-    "Run current file: Python, and C/C++ compiled and executed",
-    "Colcon build tasks and ROS 2 project templates"
+    "Syntax highlighting now actually registers \u2014 the grammars were throwing on startup",
+    "rosbridge panel shows ws://localhost:9090 instead of a broken string, so Connect works",
+    "Terminal opens once instead of every launch (stops stale-layout warnings)",
+    "In-app update pill: 'Update to v\u2026' appears in the title bar when a release ships",
+    "Live URDF / Xacro 3D preview beside the editor"
   ],
   "downloadUrls": {
-    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-0.2.0-windows-x64.exe",
-    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/Rovant-0.2.0.AppImage",
-    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.0/rovant-desktop_0.2.0_amd64.deb",
+    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe",
+    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/Rovant-0.2.1.AppImage",
+    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-desktop_0.2.1_amd64.deb",
     "android": null
   }
 }
