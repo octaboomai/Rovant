@@ -1,8 +1,8 @@
 {
   "$comment": "Machine-readable update manifest. Bump latestVersion, versionCode and the download URLs with every release. The desktop app prefers electron-updater (latest.yml on GitHub Releases); this file is the stable, cacheable endpoint for anything that cannot use it, and for future mobile builds.",
-  "latestVersion": "0.2.1",
-  "versionCode": 210,
-  "publishedAt": "2026-11-21T13:22:08Z",
+  "latestVersion": "0.2.2",
+  "versionCode": 220,
+  "publishedAt": "2026-11-21T13:51:31Z",
   "mandatory": false,
   "minimumSupported": "0.1.0",
   "releaseNotes": [
@@ -13,9 +13,9 @@
     "Live URDF / Xacro 3D preview beside the editor"
   ],
   "downloadUrls": {
-    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-0.2.1-windows-x64.exe",
-    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/Rovant-0.2.1.AppImage",
-    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.1/rovant-desktop_0.2.1_amd64.deb",
+    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/rovant-0.2.2-windows-x64.exe",
+    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/Rovant-0.2.2.AppImage",
+    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/rovant-desktop_0.2.2_amd64.deb",
     "android": null
   }
 }
