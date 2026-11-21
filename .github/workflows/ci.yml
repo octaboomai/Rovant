@@ -15,7 +15,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          # Pinned exactly: native-keymap@2.5.0 (a Theia dependency) fails to
+          # compile against Node 22.23.5 — its bundled V8 headers no longer define
+          # MemorySpan, so node-gyp aborts and `yarn install` exits 1. '22' floats to
+          # whatever patch GitHub last rolled out, which is why the same lockfile
+          # passed on 22.23.4 and failed on 22.23.5 minutes later.
+          node-version: '22.23.4'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - name: Type-check rovant-extension
@@ -31,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - name: ESLint
@@ -46,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - name: Install test deps
