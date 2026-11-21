@@ -1,21 +1,21 @@
 {
   "$comment": "Machine-readable update manifest. Bump latestVersion, versionCode and the download URLs with every release. The desktop app prefers electron-updater (latest.yml on GitHub Releases); this file is the stable, cacheable endpoint for anything that cannot use it, and for future mobile builds.",
-  "latestVersion": "0.2.2",
-  "versionCode": 220,
-  "publishedAt": "2026-11-21T13:51:31Z",
+  "latestVersion": "0.2.3",
+  "versionCode": 230,
+  "publishedAt": "2026-11-21T14:49:26Z",
   "mandatory": false,
   "minimumSupported": "0.1.0",
   "releaseNotes": [
-    "Syntax highlighting now actually registers \u2014 the grammars were throwing on startup",
-    "rosbridge panel shows ws://localhost:9090 instead of a broken string, so Connect works",
-    "Terminal opens once instead of every launch (stops stale-layout warnings)",
-    "In-app update pill: 'Update to v\u2026' appears in the title bar when a release ships",
-    "Live URDF / Xacro 3D preview beside the editor"
+    "Run C/C++ files without a shell \u2014 fixes the exit-code 127 failure",
+    "Removed the cppdbg debug config that no adapter could serve",
+    "Update status is now always visible in the status bar",
+    "Syntax highlighting registers correctly (monaco import)",
+    "rosbridge panel shows the right URL, so Connect works"
   ],
   "downloadUrls": {
-    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/rovant-0.2.2-windows-x64.exe",
-    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/Rovant-0.2.2.AppImage",
-    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.2/rovant-desktop_0.2.2_amd64.deb",
+    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/rovant-0.2.3-windows-x64.exe",
+    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/Rovant-0.2.3.AppImage",
+    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/rovant-desktop_0.2.3_amd64.deb",
     "android": null
   }
 }
