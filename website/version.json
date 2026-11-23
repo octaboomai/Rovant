@@ -1,21 +1,21 @@
 {
   "$comment": "Machine-readable update manifest. Bump latestVersion, versionCode and the download URLs with every release. The desktop app prefers electron-updater (latest.yml on GitHub Releases); this file is the stable, cacheable endpoint for anything that cannot use it, and for future mobile builds.",
-  "latestVersion": "0.2.3",
-  "versionCode": 230,
-  "publishedAt": "2026-11-21T14:49:26Z",
+  "latestVersion": "0.2.4",
+  "versionCode": 240,
+  "publishedAt": "2026-11-23T09:01:26Z",
   "mandatory": false,
   "minimumSupported": "0.1.0",
   "releaseNotes": [
-    "Run C/C++ files without a shell \u2014 fixes the exit-code 127 failure",
-    "Removed the cppdbg debug config that no adapter could serve",
-    "Update status is now always visible in the status bar",
-    "Syntax highlighting registers correctly (monaco import)",
+    "Toolchain panel now reaches the backend (absolute URL, not file://)",
+    "Python and C/C++ files open with their language detected, not Plain Text",
+    "Update status is visible in the status bar and retries until it mounts",
+    "Run C/C++ without a shell \u2014 no more exit-code 127",
     "rosbridge panel shows the right URL, so Connect works"
   ],
   "downloadUrls": {
-    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/rovant-0.2.3-windows-x64.exe",
-    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/Rovant-0.2.3.AppImage",
-    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.3/rovant-desktop_0.2.3_amd64.deb",
+    "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.4/rovant-0.2.4-windows-x64.exe",
+    "linux": "https://github.com/octaboomai/Rovant/releases/download/v0.2.4/Rovant-0.2.4.AppImage",
+    "linuxDeb": "https://github.com/octaboomai/Rovant/releases/download/v0.2.4/rovant-desktop_0.2.4_amd64.deb",
     "android": null
   }
 }
