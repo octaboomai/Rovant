@@ -183,13 +183,35 @@ export class ToolchainInstallerWidget extends BaseWidget {
         ];
         tools.forEach(t => this.renderCheck(t));
 
+        const url = '/rovant/check';
         try {
-            const res = await fetch('/rovant/check');
-            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const res = await fetch(url, { headers: { accept: 'application/json' } });
+            if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
             const results = await res.json() as CheckResult[];
             results.forEach(r => this.renderCheck(r));
         } catch (e: any) {
-            this.appendLog('Check failed: ' + (e?.message ?? e) + ' — is the IDE backend running?', 'error');
+            // Distinguish "the backend answered but with an error" from "the browser
+            // could not reach the backend at all" — they have completely different
+            // causes and used to produce the same message.
+            const origin = typeof location !== 'undefined' ? location.origin : '(unknown origin)';
+            const name = e?.name ?? 'Error';
+            const detail = e?.message ?? String(e);
+
+            let health = '';
+            try {
+                const h = await fetch('/rovant/health', { headers: { accept: 'application/json' } });
+                health = h.ok ? ' /rovant/health answered OK, so only /rovant/check failed.'
+                              : ` /rovant/health also returned HTTP ${h.status}.`;
+            } catch {
+                health = ' /rovant/health is unreachable too — the backend HTTP server is not answering.';
+            }
+
+            this.appendLog(
+                `Check failed: ${name}: ${detail}\n`
+                + `  requested: ${origin}${url}${health}\n`
+                + `  If this repeats, send %APPDATA%\\Rovant\\logs\\backend.log`,
+                'error',
+            );
             this.logWrap.style.display = '';
         }
     }

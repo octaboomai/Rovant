@@ -241,13 +241,34 @@ export class RovantUpdaterContribution implements FrontendApplicationContributio
                 break;
         }
 
-        this.statusBar.setElement('rovant-update', {
+        const entry = {
             text,
             tooltip,
             ...(command ? { command } : {}),
             alignment: StatusBarAlignment.RIGHT,
             priority: 100,
-        });
+        };
+
+        // onStart can run before the status bar has mounted, and setElement on a
+        // bar that is not there yet is silently dropped — which is why the update
+        // control could be missing entirely. Set it now, then again once the shell
+        // is definitely up.
+        this.setStatus(entry);
+        if (!this.statusRetried) {
+            this.statusRetried = true;
+            setTimeout(() => this.setStatus(entry), 2500);
+            setTimeout(() => this.setStatus(entry), 8000);
+        }
+    }
+
+    private statusRetried = false;
+
+    private setStatus(entry: Parameters<StatusBar['setElement']>[1]): void {
+        try {
+            this.statusBar.setElement('rovant-update', entry);
+        } catch {
+            /* bar not ready yet — the retries above will land it */
+        }
     }
 
     private apply(state: RovantUpdateState): void {
