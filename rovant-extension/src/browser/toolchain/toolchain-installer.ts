@@ -1,6 +1,7 @@
 import { injectable, inject } from '@theia/core/shared/inversify';
 import { BaseWidget, Message } from '@theia/core/lib/browser/widgets/widget';
 import { MessageService } from '@theia/core/lib/common/message-service';
+import { backendRoute } from '../backend-url';
 
 interface CheckResult {
     id: string;
@@ -125,7 +126,7 @@ export class ToolchainInstallerWidget extends BaseWidget {
         const installBtn = this.node.querySelector('[data-action="install"]') as HTMLButtonElement | null;
 
         checkBtn?.addEventListener('click', () => { void this.runChecks(); });
-        installBtn?.addEventListener('click', () => { this.startInstall(); });
+        installBtn?.addEventListener('click', () => { void this.startInstall(); });
     }
 
     private renderCheck(r: CheckResult): void {
@@ -183,7 +184,7 @@ export class ToolchainInstallerWidget extends BaseWidget {
         ];
         tools.forEach(t => this.renderCheck(t));
 
-        const url = '/rovant/check';
+        const url = await backendRoute('/rovant/check');
         try {
             const res = await fetch(url, { headers: { accept: 'application/json' } });
             if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
@@ -199,7 +200,7 @@ export class ToolchainInstallerWidget extends BaseWidget {
 
             let health = '';
             try {
-                const h = await fetch('/rovant/health', { headers: { accept: 'application/json' } });
+                const h = await fetch(await backendRoute('/rovant/health'), { headers: { accept: 'application/json' } });
                 health = h.ok ? ' /rovant/health answered OK, so only /rovant/check failed.'
                               : ` /rovant/health also returned HTTP ${h.status}.`;
             } catch {
@@ -216,12 +217,12 @@ export class ToolchainInstallerWidget extends BaseWidget {
         }
     }
 
-    private startInstall(): void {
+    private async startInstall(): Promise<void> {
         this.logWrap.style.display = '';
         this.logEl.innerHTML = '';
         this.eventSource?.close();
 
-        const es = new EventSource('/rovant/install-stream');
+        const es = new EventSource(await backendRoute('/rovant/install-stream'));
         this.eventSource = es;
 
         es.onmessage = (e: MessageEvent) => {

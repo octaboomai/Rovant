@@ -356,7 +356,13 @@ function setupIPC(): void {
         const r = await dialog.showOpenDialog(mainWindow!, { properties: ['openDirectory'], title: 'Open ROS 2 workspace' });
         return r.canceled ? null : r.filePaths[0];
     });
-    ipcMain.handle('Rovant:get-platform', () => ({ os: process.platform, arch: process.arch, version: APP_VERSION, home: os.homedir() }));
+    ipcMain.handle('Rovant:get-platform', () => ({
+        os: process.platform, arch: process.arch, version: APP_VERSION, home: os.homedir(),
+        // The renderer's document base can resolve to file://, which turns a relative
+        // fetch into a filesystem lookup (ERR_FILE_NOT_FOUND). Hand it the real origin.
+        backendUrl: isDev ? 'http://127.0.0.1:3000'
+                          : `http://127.0.0.1:${(app as any)._theiaPort || THEIA_PORT}`,
+    }));
 }
 
 // ── Auto-updater (electron-updater over GitHub Releases) ──────────────────────

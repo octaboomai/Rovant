@@ -1,4 +1,5 @@
 import { injectable, inject } from '@theia/core/shared/inversify';
+import { backendRoute } from '../backend-url';
 import { BaseWidget, Message } from '@theia/core/lib/browser/widgets/widget';
 import { StatefulWidget } from '@theia/core/lib/browser/shell/shell-layout-restorer';
 import { MessageService } from '@theia/core/lib/common/message-service';
@@ -73,7 +74,9 @@ export class UrdfViewerWidget extends BaseWidget implements StatefulWidget {
         }
 
         try {
-            const url = `/rovant/xacro-expand?path=${encodeURIComponent(filePath)}`;
+            // Absolute, not relative: the renderer's base can be file://, which would
+            // turn this into a filesystem lookup instead of a backend call.
+            const url = await backendRoute(`/rovant/xacro-expand?path=${encodeURIComponent(filePath)}`);
             const res = await fetch(url);
 
             if (!res.ok) {
