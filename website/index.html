@@ -62,6 +62,8 @@
         "ROS 2 Humble detection via WSL2",
         "Live ROS topics over rosbridge",
         "Colcon build tasks and project templates",
+      "IntelliSense via pyright (Python) and clangd (C/C++)",
+      "Python debugging with breakpoints via debugpy",
         "Windows installer, .deb and AppImage"
       ],
       "programmingLanguage": ["Python", "C", "C++", "CMake", "XML"],
@@ -602,12 +604,13 @@ class Teleop(Node):
           <li><span class="tick">✓</span><span>URDF / Xacro 3D preview</span></li>
           <li><span class="tick">✓</span><span>Live topics over rosbridge</span></li>
           <li><span class="tick">✓</span><span>Colcon build tasks and project templates</span></li>
+          <li><span class="tick">✓</span><span>IntelliSense — completion, hover and diagnostics via pyright (Python) and clangd (C/C++)</span></li>
+          <li><span class="tick">✓</span><span>Python debugging with breakpoints, watch and call stack via debugpy</span></li>
         </ul>
       </div>
       <div class="panel soon">
         <h3>Coming soon</h3>
         <ul>
-          <li><span class="tick">○</span><span>Python and C++ IntelliSense (pyright + clangd)</span></li>
           <li><span class="tick">○</span><span>One-click C++ debugging (lldb-dap)</span></li>
           <li><span class="tick">○</span><span>XML / URDF grammar colouring</span></li>
           <li><span class="tick">○</span><span>Code signing certificates</span></li>
@@ -714,8 +717,8 @@ class Teleop(Node):
             <li><strong>Windows:</strong> requires WSL2 with an Ubuntu 22.04 LTS distribution. ROS 2 Humble must be installed inside it — the Toolchain panel can do this, but it needs <code>winget</code>.</li>
             <li><strong>Linux:</strong> built and tested on Ubuntu 22.04 LTS, x86_64.</li>
             <li><strong>ROS 2 distro:</strong> Humble only. Jazzy and Rolling are not supported yet.</li>
-            <li><strong>No IntelliSense yet:</strong> no completion, go-to-definition or inline errors.</li>
-            <li><strong>No debugger yet:</strong> the launch configurations were removed in 0.1.1 because they failed with a timeout.</li>
+            <li><strong>IntelliSense:</strong> pyright and clangd ship with the app. Python completion works out of the box; C/C++ completion is best-effort until the project has a <code>compile_commands.json</code>, which clangd uses to resolve includes.</li>
+            <li><strong>Debugging:</strong> Python works through debugpy (installed on first run). There is no C++ debugger yet — the <code>cppdbg</code> configuration was removed because no adapter in this build could serve it.</li>
             <li><strong>Unsigned builds:</strong> SmartScreen warnings on Windows until certificates arrive.</li>
             <li><strong>Architecture:</strong> x86_64 only; no ARM builds yet.</li>
           </ul>

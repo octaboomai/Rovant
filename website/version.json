@@ -6,11 +6,11 @@
   "mandatory": false,
   "minimumSupported": "0.1.0",
   "releaseNotes": [
-    "Python debugging works \u2014 debugpy is installed automatically",
-    "Toolchain panel reaches the backend (absolute URL)",
-    "Python and C/C++ files open with the right language, not Plain Text",
-    "Update status visible in the status bar",
-    "Run C/C++ without a shell \u2014 no more exit-code 127"
+    "IntelliSense is here \u2014 completion, hover and diagnostics via pyright and clangd",
+    "Python debugging with breakpoints, watch and call stack via debugpy",
+    "Language detection fixed: .py and C/C++ files open with the right language",
+    "Toolchain panel now reaches the backend (absolute URL)",
+    "Update status visible in the status bar"
   ],
   "downloadUrls": {
     "windows": "https://github.com/octaboomai/Rovant/releases/download/v0.2.5/rovant-0.2.5-windows-x64.exe",

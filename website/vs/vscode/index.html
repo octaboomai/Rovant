@@ -176,6 +176,7 @@ footer{margin-top:64px;border-top:1px solid var(--border-subtle);padding:30px 0 
         <li><span class="tick">✓</span>Colcon build tasks and ROS 2 project templates built in</li>
         <li><span class="tick">✓</span>One installer, no extension hunting or configuration files</li>
         <li><span class="tick">✓</span>Apache 2.0, no account, no telemetry you cannot switch off</li>
+        <li><span class="tick">✓</span>pyright and clangd bundled — Python completion works with no setup</li>
       </ul>
     </div>
   </div>
@@ -187,8 +188,8 @@ footer{margin-top:64px;border-top:1px solid var(--border-subtle);padding:30px 0 
     </thead>
     <tbody>
       <tr><td>Python / C++ / CMake syntax highlighting</td><td class="y">✓</td><td class="y">✓</td></tr>
-      <tr><td>IntelliSense &amp; go-to-definition</td><td class="n">✗</td><td class="y">✓</td></tr>
-      <tr><td>Debugger (breakpoints, watch)</td><td class="n">✗</td><td class="y">✓</td></tr>
+      <tr><td>IntelliSense &amp; go-to-definition</td><td class="y">✓</td><td class="y">✓</td></tr>
+      <tr><td>Debugger (breakpoints, watch)</td><td class="y">Python only</td><td class="y">✓</td></tr>
       <tr><td>Run current file in terminal</td><td class="y">✓</td><td class="y">✓</td></tr>
       <tr><td>C/C++ compile-and-run in one step</td><td class="y">✓</td><td class="part">via tasks</td></tr>
       <tr><td>Live URDF / Xacro 3D preview</td><td class="y">✓ built in</td><td class="part">via extension</td></tr>
@@ -202,7 +203,7 @@ footer{margin-top:64px;border-top:1px solid var(--border-subtle);padding:30px 0 
   </table>
 
   <h2>When to choose VS Code</h2>
-  <p>You want the best editor available and are willing to spend an evening on setup. You need a debugger. You work on macOS. You depend on a specific extension that Rovant does not have. You are already productive in ROS 2 and do not need help getting started.</p>
+  <p>You want the best editor available and are willing to spend an evening on setup. You need to debug C++. You work on macOS. You depend on a specific extension that Rovant does not have. You are already productive in ROS 2 and do not need help getting started.</p>
 
   <h2>When to choose Rovant</h2>
   <p>You are on Windows and the ROS 2 installation guide has defeated you. You want to look at a URDF or Xacro file as a 3D model without launching Gazebo or RViz. You are teaching, demoing or learning, and the environment is the obstacle rather than the point. You want colcon builds and topic inspection in the same window as your code.</p>

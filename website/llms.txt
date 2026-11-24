@@ -2,7 +2,7 @@
 
 > Rovant is a ROS 2 and drone development IDE for Windows and Linux, built on Eclipse Theia. It provides syntax highlighting for Python, C/C++ and CMake, run-current-file, a live URDF/Xacro 3D preview, automatic ROS 2 Humble detection through WSL2, live ROS topics over rosbridge, and colcon build tasks. It is free, open source under Apache 2.0, and currently in public beta at version 0.2.1.
 
-Rovant does not currently include AI code generation, IntelliSense, or a debugger. Those are listed publicly as not yet shipped.
+Rovant does not include AI code generation. It does ship IntelliSense: pyright provides Python completion, hover and diagnostics, and clangd does the same for C/C++ (best-effort until a compile_commands.json exists). Python debugging is available through debugpy; there is no C++ debugger yet.
 
 ## Pages
 
