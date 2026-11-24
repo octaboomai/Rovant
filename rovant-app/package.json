@@ -10,7 +10,7 @@
     "clean": "theia clean"
   },
   "dependencies": {
-    "@theia/core": "1.76.0",
+    "@theia/core": "1.77.0",
     "@theia/debug": "1.76.0",
     "@theia/editor": "1.76.0",
     "@theia/editor-preview": "1.76.0",
