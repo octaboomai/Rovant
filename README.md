@@ -4,14 +4,14 @@
 > Zero-setup ROS 2 robotics IDE for Ubuntu and Windows.
 
 [![Release](https://img.shields.io/github/v/release/octaboomai/Rovant)](https://github.com/octaboomai/Rovant/releases/latest)
-[![Version](https://img.shields.io/badge/version-0.1.2-0fdfff)](https://github.com/octaboomai/Rovant/releases/tag/v0.1.2)
+[![Version](https://img.shields.io/badge/version-0.2.5-0fdfff)](https://github.com/octaboomai/Rovant/releases/tag/v0.2.5)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 
 ---
 
 ## Download
 
-**Latest release: Rovant v0.1.2**
+**Latest release: Rovant v0.2.5**
 
 | Platform | Format | Install |
 |---|---|---|
@@ -19,7 +19,7 @@
 | **Any Linux** | `.AppImage` | `chmod +x rovant-*.AppImage && ./rovant-*.AppImage` |
 | **Windows 10/11** | `.exe` | Run the installer |
 
-→ **[⬇ Download Rovant v0.1.2 — latest release](https://github.com/octaboomai/Rovant/releases/latest)**
+→ **[⬇ Download Rovant v0.2.5 — latest release](https://github.com/octaboomai/Rovant/releases/latest)**
 
 ### Windows: browser blocked the download?
 
@@ -27,7 +27,7 @@ The Windows installer is **not code-signed**, so Chrome / Edge and Windows Smart
 
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-WebRequest -Uri "https://github.com/octaboomai/Rovant/releases/download/v0.1.2/rovant-0.1.2-windows-x64.exe" -OutFile "$env:USERPROFILE\Downloads\rovant-0.1.2-windows-x64.exe"
+Invoke-WebRequest -Uri "https://github.com/octaboomai/Rovant/releases/download/v0.2.5/rovant-0.2.5-windows-x64.exe" -OutFile "$env:USERPROFILE\Downloads\rovant-0.2.5-windows-x64.exe"
 ```
 
 Then run the file from your Downloads folder. Windows may still show a SmartScreen prompt for an unsigned app — choose **More info → Run anyway**.
@@ -77,14 +77,14 @@ yarn dist:windows  # → dist/*.exe
 ## Release
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.2.5
+git push origin v0.2.5
 # GitHub Actions builds and publishes automatically
 ```
 
 ---
 
-## Known limitations (v0.1 beta)
+## Known limitations (v0.2.5 beta)
 
 Please read this before filing an issue. It is deliberately blunt.
 
