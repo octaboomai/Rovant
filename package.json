@@ -17,7 +17,7 @@
     "clean": "yarn workspace rovant-extension clean && yarn workspace rovant-app clean"
   },
   "devDependencies": {
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^26.18.0",
     "typescript": "^5.3.3",
     "electron-updater": "^6.3.9",
     "electron": "42.8.1"
