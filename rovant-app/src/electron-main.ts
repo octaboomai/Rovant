@@ -220,7 +220,11 @@ async function firstRunSetup(): Promise<void> {
 
     // Try to install Python packages silently in background
     const pip = process.platform === 'win32' ? 'pip' : 'pip3';
-    const pkgs = 'pymavlink pyulog numpy';
+    // debugpy is the Python debug adapter (see python-debug-adapter.ts).
+    // Without it `python -m debugpy.adapter` exits immediately and Theia
+    // waits out its full timeout before reporting "Timed out waiting for
+    // launcher to connect".
+    const pkgs = 'pymavlink pyulog numpy debugpy';
     try {
         await safeExec(`${pip} install ${pkgs} --break-system-packages -q 2>&1`, { timeout: 90_000 });
     } catch {

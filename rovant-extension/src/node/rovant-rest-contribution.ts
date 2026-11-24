@@ -56,6 +56,7 @@ const TOOL_DEFS: ToolDef[] = [
     { id: 'git',       label: 'Git',                  cmd: 'git --version' },
     { id: 'clangd',    label: 'clangd (C++ LSP)',     cmd: 'clangd --version' },
     { id: 'pyright',   label: 'pyright (Python LSP)', cmd: 'pyright --version' },
+    { id: 'debugpy',   label: 'debugpy (Python debugger)', cmd: 'python3 -c "import debugpy; print(debugpy.__version__)"' },
     { id: 'pymavlink', label: 'pymavlink',            cmd: 'python3 -c "import pymavlink; print(pymavlink.__version__)"' },
     { id: 'pyulog',    label: 'pyulog',               cmd: 'python3 -c "import pyulog; print(pyulog.__version__)"' },
     { id: 'numpy',     label: 'numpy',                cmd: 'python3 -c "import numpy; print(numpy.__version__)"' },

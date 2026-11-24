@@ -179,6 +179,7 @@ export class ToolchainInstallerWidget extends BaseWidget {
             { id: 'docker',    label: 'Docker Engine',  found: false, version: '...' },
             { id: 'clangd',    label: 'clangd',         found: false, version: '...' },
             { id: 'pyright',   label: 'pyright',        found: false, version: '...' },
+            { id: 'debugpy',   label: 'debugpy',        found: false, version: '...' },
             { id: 'pymavlink', label: 'pymavlink',      found: false, version: '...' },
             { id: 'rosbridge', label: 'rosbridge-suite', found: false, version: '...' },
         ];
